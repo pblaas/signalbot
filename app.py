@@ -4,6 +4,7 @@ import pprint
 import json 
 import ast 
 from message import Message
+import time
 
 
 # run the docker command with paramters
@@ -46,27 +47,65 @@ def init_program():
 
 def parse_message(value):
     res = json.loads(value)
-    m = Message(
-         res['envelope']['source'],res['envelope']['syncMessage']['sentMessage']['message'],res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId']
-         )
-    #pprint.pprint(res)
-    print(m.getSource())
-    print(m.getGroupinfo())
-    print(m.getMessage())
+    pprint.pprint(res)
+    if "syncMessage" in res['envelope']:
+        if "sentMessage" in res['envelope']['syncMessage']:
+            m = Message(
+                res['envelope']['source'],
+                res['envelope']['syncMessage']['sentMessage']['message'],
+                res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId'],
+                __author__,
+                __version__
+                )
+            pprint.pprint(res)
+            print(m.getSource())
+            print(m.getGroupinfo())
+            print(m.getMessage())
+            print(m.getVersion())
+            run_signalcli(m)
+
+    if "dataMessage" in res['envelope']:
+        if "message" in res['envelope']['dataMessage']:
+            m = Message(
+                res['envelope']['source'],
+                res['envelope']['dataMessage']['message'],
+                res['envelope']['dataMessage']['groupInfo']['groupId'],
+                __author__,
+                __version__
+                )
+            pprint.pprint(res)
+            print(m.getSource())
+            print(m.getGroupinfo())
+            print(m.getMessage())
+            print(m.getVersion())
+            run_signalcli(m)
 
 
-def run_signalcli(groupid,action):
+def run_signalcli(m):
 
     #case statement to configure actionmessage
 
-    home = os.environ['HOME']
-    client = docker.from_env()
-    output = client.containers.run(
-        signalcliimage, 
-        "-o json -u " + registerednr + " send -g " + groupid + " -m " + actionmessage
-        auto_remove=True,
-        volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-        )
+    def xyz(x):
+        switcher = {
+            '!version': m.getVersion(),
+            '!commands':"null"
+        }
+        return switcher.get(x,"Oops! Invalid Option")
+
+    if m.getMessage is not None and m.getMessage().startswith('!'):
+        actionmessage=xyz(m.getMessage())
+
+        home = os.environ['HOME']
+        client = docker.from_env()
+        client.containers.run(
+            signalcliimage, 
+            "-u " + registerednr + " send -g " + m.getGroupinfo() + " -m " + "\"" + actionmessage + "\"",
+            auto_remove=True,
+            volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+            )
 
 if __name__ == '__main__':
-    init_program() 
+
+    while True: 
+        init_program() 
+        time.sleep( 2 )

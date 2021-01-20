@@ -33,3 +33,5 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 *  !weather - show weather 
 * !news - parse latest news from site x
 * !me - return with random reply
+* !version - show version
+* !commands - show available commands
