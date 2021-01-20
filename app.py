@@ -88,7 +88,10 @@ def run_signalcli(m):
     def xyz(x):
         switcher = {
             '!version': m.getVersion(),
-            '!commands':"null"
+            '!help': m.getHelp(),
+            '!random' : str(m.getRandom()),
+            '!flip': m.getFlip(),
+            '!chuck': m.getChuck()
         }
         return switcher.get(x,"Oops! Invalid Option")
 
