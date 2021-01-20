@@ -61,7 +61,7 @@ def parse_message(value):
             print(m.getSource())
             print(m.getGroupinfo())
             print(m.getMessage())
-            print(m.getVersion())
+            #print(m.getVersion())
             run_signalcli(m)
 
     if "dataMessage" in res['envelope']:
@@ -77,7 +77,7 @@ def parse_message(value):
             print(m.getSource())
             print(m.getGroupinfo())
             print(m.getMessage())
-            print(m.getVersion())
+            #print(m.getVersion())
             run_signalcli(m)
 
 
@@ -95,7 +95,7 @@ def run_signalcli(m):
         }
         return switcher.get(x,"Oops! Invalid Option")
 
-    if m.getMessage is not None and m.getMessage().startswith('!'):
+    if isinstance(m.getMessage(),str) and m.getMessage().startswith('!'):
         actionmessage=xyz(m.getMessage())
 
         home = os.environ['HOME']
