@@ -29,8 +29,8 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 
 ## bot ideas
 * !jokes - show random joke
-*  !gifs  - show random gif
-*  !weather - show weather 
+* !gifs  - show random gif
+* !weather - show weather 
 * !news - parse latest news from site x
 * !me - return with random reply
 * !version - show version

@@ -50,35 +50,37 @@ def parse_message(value):
     pprint.pprint(res)
     if "syncMessage" in res['envelope']:
         if "sentMessage" in res['envelope']['syncMessage']:
-            m = Message(
-                res['envelope']['source'],
-                res['envelope']['syncMessage']['sentMessage']['message'],
-                res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId'],
-                __author__,
-                __version__
-                )
-            pprint.pprint(res)
-            print(m.getSource())
-            print(m.getGroupinfo())
-            print(m.getMessage())
-            #print(m.getVersion())
-            run_signalcli(m)
+            if "groupInfo" in res['envelope']['syncMessage']['sentMessage']:
+                m = Message(
+                    res['envelope']['source'],
+                    res['envelope']['syncMessage']['sentMessage']['message'],
+                    res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId'],
+                    __author__,
+                    __version__
+                    )
+                pprint.pprint(res)
+                print(m.getSource())
+                print(m.getGroupinfo())
+                print(m.getMessage())
+                #print(m.getVersion())
+                run_signalcli(m)
 
     if "dataMessage" in res['envelope']:
         if "message" in res['envelope']['dataMessage']:
-            m = Message(
-                res['envelope']['source'],
-                res['envelope']['dataMessage']['message'],
-                res['envelope']['dataMessage']['groupInfo']['groupId'],
-                __author__,
-                __version__
-                )
-            pprint.pprint(res)
-            print(m.getSource())
-            print(m.getGroupinfo())
-            print(m.getMessage())
-            #print(m.getVersion())
-            run_signalcli(m)
+            if "groupInfo" in res['envelope']['dataMessage']:
+                m = Message(
+                    res['envelope']['source'],
+                    res['envelope']['dataMessage']['message'],
+                    res['envelope']['dataMessage']['groupInfo']['groupId'],
+                    __author__,
+                    __version__
+                    )
+                pprint.pprint(res)
+                print(m.getSource())
+                print(m.getGroupinfo())
+                print(m.getMessage())
+                #print(m.getVersion())
+                run_signalcli(m)
 
 
 def run_signalcli(m):
@@ -91,7 +93,8 @@ def run_signalcli(m):
             '!help': m.getHelp(),
             '!random' : str(m.getRandom()),
             '!flip': m.getFlip(),
-            '!chuck': m.getChuck()
+            '!chuck': m.getChuck(),
+            '!gif': m.getGif()
         }
         return switcher.get(x,"Oops! Invalid Option")
 

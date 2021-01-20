@@ -33,6 +33,7 @@ class Message:
         !random
         !flip
         !chuck
+        !gif
         """
 
     def getRandom(self):
@@ -47,3 +48,21 @@ class Message:
         chuck = json.loads(r.data.decode('utf-8'))
         pprint.pprint(chuck)
         return chuck['value']
+
+    def getGif(self):
+        http = urllib3.PoolManager()
+        r = http.request('GET', 'https://api.giphy.com/v1/gifs/random?api_key=elRcLdk25G3cllhDMki4ZIKLMxKqRPSW&tag=&rating=g')
+        gif = json.loads(r.data.decode('utf-8'))
+        #return (gif['data']['image_original_url'])
+        url = "https://i.giphy.com/media/" + gif['data']['id'] + "/giphy.gif"
+        r = http.request('GET', url, preload_content=False)
+
+        with open("/config/giphy.gif", 'wb') as out:
+            while True:
+                data = r.read(chunk_size)
+                if not data:
+                    break
+                out.write(data)
+        r.release_conn()
+
+        return("https://i.giphy.com/media/" + gif['data']['id'] + "/giphy.gif")
