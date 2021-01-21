@@ -12,7 +12,7 @@ __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
 __version__ = "0.0.3"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
-DEBUG = False
+DEBUG = True
 
 
 def init_program():
@@ -81,7 +81,7 @@ def run_signalcli(messageobject):
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
 
         action = SwitchCase(__version__, __author__)
-        actionmessage = action.switch(messageobject.getmessage())
+        actionmessage = action.switch(messageobject.getmessage()).replace('"', '')
 
         home = os.environ['HOME']
         client = docker.from_env()
