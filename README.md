@@ -28,13 +28,14 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 ```
 
 ## bot ideas
-* !jokes - show random joke
-* !gifs  - show random gif
+* !chuck - show random chuck norris joke [DONE]
+* !gif  - show random gif from Giphy [DONE]
 * !weather - show weather 
 * !news - parse latest news from site x
-* !me - return with random reply
-* !version - show version
-* !commands - show available commands
+* !me - return with random reply 
+* !version - show version [DONE]
+* !help - show available commands [DONE]
 * !ai - return interesting AI facts?
 * !hal - hal quotes from 2001 a space oddysee
+* !sexy - sexy images
 
