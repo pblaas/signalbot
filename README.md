@@ -35,3 +35,5 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !me - return with random reply
 * !version - show version
 * !commands - show available commands
+* !ai - return interesting AI facts?
+
