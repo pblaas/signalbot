@@ -36,4 +36,5 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !version - show version
 * !commands - show available commands
 * !ai - return interesting AI facts?
+* !hal - hal quotes from 2001 a space oddysee
 
