@@ -2,22 +2,10 @@
 
 import os
 import random
-import pprint
+# import pprint
 import json
 import urllib3
 import shutil
-
-
-def gethelp():
-    """Return all available commands."""
-    return """Available commands:
-    !help
-    !version
-    !random
-    !flip
-    !chuck
-    !gif
-    """
 
 
 class SwitchCase:
@@ -32,6 +20,19 @@ class SwitchCase:
         """Switch function to switch between available functions."""
         default = "Invalid option."
         return getattr(self, str(action)[1:], lambda: default)()
+
+    def help(self):
+        """Return all available commands."""
+        return """
+        cmnds
+        ----
+        !help
+        !version
+        !random
+        !flip
+        !chuck
+        !gif
+        """
 
     def test(self):
         """Simple test function."""
@@ -59,7 +60,7 @@ class SwitchCase:
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://api.chucknorris.io/jokes/random')
         chuck = json.loads(req_return.data.decode('utf-8'))
-        pprint.pprint(chuck)
+        # pprint.pprint(chuck)
         return chuck['value']
 
     def flip(self):
