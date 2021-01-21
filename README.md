@@ -38,4 +38,4 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !ai - return interesting AI facts?
 * !hal - hal quotes from 2001 a space oddysee
 * !sexy - sexy images
-
+* !tss - http://quotes.rest/qod.json?category=inspire
