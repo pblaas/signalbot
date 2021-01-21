@@ -6,10 +6,10 @@ import json
 import time
 import docker
 from message import Message
-from botfunctions import getversion, getchuck, getgif, gethelp, getrandom, getflip
+from botfunctions import SwitchCase
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 
@@ -75,20 +75,11 @@ def parse_message(value):
 
 def run_signalcli(messageobject):
     """ Run SignalCLI and return messages """
-    def xyz(x_input):
-        """ Switcher function used as case statement """
-        switcher = {
-            '!version': getversion(__version__, __author__),
-            '!help': gethelp(),
-            '!random': str(getrandom()),
-            '!flip': getflip(),
-            '!chuck': getchuck(),
-            '!gif': getgif()
-        }
-        return switcher.get(x_input, "Oops! Invalid Option")
 
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
-        actionmessage = xyz(messageobject.getmessage())
+
+        action = SwitchCase(__version__, __author__)
+        actionmessage = action.switch(messageobject.getmessage())
 
         home = os.environ['HOME']
         client = docker.from_env()
@@ -96,7 +87,7 @@ def run_signalcli(messageobject):
         if messageobject.getmessage() == "!gif":
             client.containers.run(
                 SIGNALCLIIMAGE,
-                "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + actionmessage + " -a /config/giphy.gif",
+                "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /config/giphy.gif",
                 auto_remove=True,
                 volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
@@ -114,4 +105,4 @@ if __name__ == '__main__':
     print("Signal bot " + __version__ + " started.")
     while True:
         init_program()
-        time.sleep(2)
+        time.sleep(1)
