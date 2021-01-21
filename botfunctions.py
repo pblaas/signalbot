@@ -1,4 +1,4 @@
-""" Collection of Bot functions """
+"""Collection of Bot functions."""
 
 import os
 import random
@@ -9,7 +9,7 @@ import shutil
 
 
 def gethelp():
-    """ return all available commands """
+    """Return all available commands."""
     return """Available commands:
     !help
     !version
@@ -21,24 +21,28 @@ def gethelp():
 
 
 class SwitchCase:
+    """SwitchCase class to switch bot functions."""
 
     def __init__(self, version, author):
+        """Initialize SwitchCase with version and author variables."""
         self._version = version
         self._author = author
 
     def switch(self, action):
+        """Switch function to switch between available functions."""
         default = "Invalid option."
         return getattr(self, str(action)[1:], lambda: default)()
 
     def test(self):
+        """Simple test function."""
         return "@#*&ES&@#YF.. nooo you got me!"
 
     def version(self):
-        """ return version information """
+        """Return version information."""
         return "SignalCLI bot version: " + self._version + " by " + self._author
 
     def gif(self):
-        """ Get random gif images from Giphy platform """
+        """Get random gif images from Giphy platform."""
         home = os.environ['HOME']
         http = urllib3.PoolManager()
         req_gif = http.request('GET', 'https://api.giphy.com/v1/gifs/random?api_key=elRcLdk25G3cllhDMki4ZIKLMxKqRPSW&tag=funny&rating=pg-13')
@@ -51,7 +55,7 @@ class SwitchCase:
         return "Gif"
 
     def chuck(self):
-        """ Get random jokes from chucknorris API """
+        """Get random jokes from chucknorris API."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://api.chucknorris.io/jokes/random')
         chuck = json.loads(req_return.data.decode('utf-8'))
@@ -59,9 +63,9 @@ class SwitchCase:
         return chuck['value']
 
     def flip(self):
-        """ Flip a coin, Heads and Tails """
+        """Flip a coin, Heads and Tails."""
         return random.choice(['Heads', 'Tails'])
 
     def random(self):
-        """ return a random number between 0 and 1000 """
+        """Return a random number between 0 and 1000."""
         return str(random.randrange(1000))

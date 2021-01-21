@@ -1,4 +1,4 @@
-""" Signal bot based on Single-cli """
+"""Signal bot based on Single-cli."""
 
 import os
 import pprint
@@ -15,7 +15,7 @@ SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 
 
 def init_program():
-    """ Initial start of program """
+    """Initialize start of program."""
     try:
         home = os.environ['HOME']
         client = docker.from_env()
@@ -24,8 +24,7 @@ def init_program():
             "-o json -u " + REGISTEREDNR + " receive",
             auto_remove=True,
             volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-            )
-        # print(output)
+        )
         lines = []
         for line in output.decode('utf8').split("\n"):
             lines.append(line)
@@ -41,7 +40,7 @@ def init_program():
 
 
 def parse_message(value):
-    """ Creating message object from input """
+    """Create  message object from input."""
     res = json.loads(value)
     pprint.pprint(res)
     if "syncMessage" in res['envelope']:
@@ -51,7 +50,7 @@ def parse_message(value):
                     res['envelope']['source'],
                     res['envelope']['syncMessage']['sentMessage']['message'],
                     res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId']
-                    )
+                )
                 pprint.pprint(res)
                 print(messageobject.getsource())
                 print(messageobject.getgroupinfo())
@@ -65,7 +64,7 @@ def parse_message(value):
                     res['envelope']['source'],
                     res['envelope']['dataMessage']['message'],
                     res['envelope']['dataMessage']['groupInfo']['groupId']
-                    )
+                )
                 pprint.pprint(res)
                 print(messageobject.getsource())
                 print(messageobject.getgroupinfo())
@@ -74,8 +73,7 @@ def parse_message(value):
 
 
 def run_signalcli(messageobject):
-    """ Run SignalCLI and return messages """
-
+    """Run SignalCLI and return messages."""
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
 
         action = SwitchCase(__version__, __author__)
@@ -90,14 +88,14 @@ def run_signalcli(messageobject):
                 "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /config/giphy.gif",
                 auto_remove=True,
                 volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                )
+            )
         else:
             client.containers.run(
                 SIGNALCLIIMAGE,
                 "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
                 auto_remove=True,
                 volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                )
+            )
 
 
 if __name__ == '__main__':
