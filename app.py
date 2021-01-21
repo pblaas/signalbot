@@ -6,9 +6,10 @@ import json
 import time
 import docker
 from message import Message
+from botfunctions import getversion, getchuck, getgif, gethelp, getrandom, getflip
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 
@@ -49,15 +50,12 @@ def parse_message(value):
                 messageobject = Message(
                     res['envelope']['source'],
                     res['envelope']['syncMessage']['sentMessage']['message'],
-                    res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId'],
-                    __author__,
-                    __version__
+                    res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId']
                     )
                 pprint.pprint(res)
                 print(messageobject.getsource())
                 print(messageobject.getgroupinfo())
                 print(messageobject.getmessage())
-                print(messageobject.getversion())
                 run_signalcli(messageobject)
 
     if "dataMessage" in res['envelope']:
@@ -66,15 +64,12 @@ def parse_message(value):
                 messageobject = Message(
                     res['envelope']['source'],
                     res['envelope']['dataMessage']['message'],
-                    res['envelope']['dataMessage']['groupInfo']['groupId'],
-                    __author__,
-                    __version__
+                    res['envelope']['dataMessage']['groupInfo']['groupId']
                     )
                 pprint.pprint(res)
                 print(messageobject.getsource())
                 print(messageobject.getgroupinfo())
                 print(messageobject.getmessage())
-                print(messageobject.getversion())
                 run_signalcli(messageobject)
 
 
@@ -83,12 +78,12 @@ def run_signalcli(messageobject):
     def xyz(x_input):
         """ Switcher function used as case statement """
         switcher = {
-            '!version': messageobject.getversion(),
-            '!help': messageobject.gethelp(),
-            '!random': str(messageobject.getrandom()),
-            '!flip': messageobject.getflip(),
-            '!chuck': messageobject.getchuck(),
-            '!gif': messageobject.getgif()
+            '!version': getversion(__version__, __author__),
+            '!help': gethelp(),
+            '!random': str(getrandom()),
+            '!flip': getflip(),
+            '!chuck': getchuck(),
+            '!gif': getgif()
         }
         return switcher.get(x_input, "Oops! Invalid Option")
 
