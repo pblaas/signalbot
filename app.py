@@ -12,6 +12,7 @@ __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
 __version__ = "0.0.3"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
+DEBUG = False
 
 
 def init_program():
@@ -42,7 +43,8 @@ def init_program():
 def parse_message(value):
     """Create  message object from input."""
     res = json.loads(value)
-    pprint.pprint(res)
+    if DEBUG:
+        pprint.pprint(res)
     if "syncMessage" in res['envelope']:
         if "sentMessage" in res['envelope']['syncMessage']:
             if "groupInfo" in res['envelope']['syncMessage']['sentMessage']:
@@ -51,10 +53,11 @@ def parse_message(value):
                     res['envelope']['syncMessage']['sentMessage']['message'],
                     res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId']
                 )
-                pprint.pprint(res)
-                print(messageobject.getsource())
-                print(messageobject.getgroupinfo())
-                print(messageobject.getmessage())
+                if DEBUG:
+                    pprint.pprint(res)
+                    print(messageobject.getsource())
+                    print(messageobject.getgroupinfo())
+                    print(messageobject.getmessage())
                 run_signalcli(messageobject)
 
     if "dataMessage" in res['envelope']:
@@ -65,10 +68,11 @@ def parse_message(value):
                     res['envelope']['dataMessage']['message'],
                     res['envelope']['dataMessage']['groupInfo']['groupId']
                 )
-                pprint.pprint(res)
-                print(messageobject.getsource())
-                print(messageobject.getgroupinfo())
-                print(messageobject.getmessage())
+                if DEBUG:
+                    pprint.pprint(res)
+                    print(messageobject.getsource())
+                    print(messageobject.getgroupinfo())
+                    print(messageobject.getmessage())
                 run_signalcli(messageobject)
 
 
@@ -101,6 +105,7 @@ def run_signalcli(messageobject):
 if __name__ == '__main__':
 
     print("Signal bot " + __version__ + " started.")
+    print("Debug is " + str(DEBUG))
     while True:
         init_program()
         time.sleep(1)
