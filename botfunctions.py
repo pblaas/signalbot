@@ -48,12 +48,12 @@ class SwitchCase:
 
     def gif(self):
         """Get random gif images from Giphy platform."""
-        home = os.environ['HOME']
         http = urllib3.PoolManager()
         req_gif = http.request('GET', 'https://api.giphy.com/v1/gifs/random?api_key=elRcLdk25G3cllhDMki4ZIKLMxKqRPSW&tag=funny&rating=pg-13')
         gif = json.loads(req_gif.data.decode('utf-8'))
         url = "https://i.giphy.com/media/" + gif['data']['id'] + "/giphy.gif"
 
+        home = os.environ['HOME']
         with open(home + "/signal/giphy.gif", 'wb') as out:
             r = http.request('GET', url, preload_content=False)
             shutil.copyfileobj(r, out)
