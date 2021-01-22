@@ -1,0 +1,18 @@
+{'envelope': {'dataMessage': {'attachments': [],
+                              'expiresInSeconds': 0,
+                              'groupInfo': {'groupId': 'OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI=',
+                                            'type': 'DELIVER'},
+                              'mentions': [{'length': 1,
+                                            'name': '+31630030905',
+                                            'start': 0}],
+                              'message': '￼ hallo',
+                              'timestamp': 1611316403160,
+                              'viewOnce': False},
+              'source': '+31645606468',
+              'sourceDevice': 1,
+              'timestamp': 1611316403160}}
++31645606468
+OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI=
+￼ hallo
+
+'😮'
