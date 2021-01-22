@@ -5,8 +5,10 @@ import pprint
 import json
 import time
 import docker
+import emoji
 from message import Message
 from botfunctions import SwitchCase
+
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
 __version__ = "0.0.3"
@@ -51,7 +53,8 @@ def parse_message(value):
                 messageobject = Message(
                     res['envelope']['source'],
                     res['envelope']['syncMessage']['sentMessage']['message'],
-                    res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId']
+                    res['envelope']['syncMessage']['sentMessage']['groupInfo']['groupId'],
+                    res['envelope']['syncMessage']['sentMessage']['timestamp']
                 )
                 if DEBUG:
                     pprint.pprint(res)
@@ -66,7 +69,8 @@ def parse_message(value):
                 messageobject = Message(
                     res['envelope']['source'],
                     res['envelope']['dataMessage']['message'],
-                    res['envelope']['dataMessage']['groupInfo']['groupId']
+                    res['envelope']['dataMessage']['groupInfo']['groupId'],
+                    res['envelope']['dataMessage']['timestamp']
                 )
                 if DEBUG:
                     pprint.pprint(res)
@@ -93,6 +97,25 @@ def run_signalcli(messageobject):
                 auto_remove=True,
                 volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
             )
+        elif messageobject.getmessage() == "!random":
+            client.containers.run(
+                SIGNALCLIIMAGE,
+                "updateGroup -g " + messageobject.getgroupinfo() + " -n " + "\"" + actionmessage + "\"",
+                auto_remove=True,
+                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+            )
+        # elif messageobject.getsource() == "+31630030905":
+        #     print("chain hit!")
+        #     thumb = emoji.emojize(':thumbs_up:')
+        #     print(thumb)
+        #     print(type(thumb))
+        #     print(messageobject.gettimestamp())
+        #     client.containers.run(
+        #         SIGNALCLIIMAGE,
+        #         "-u " + REGISTEREDNR + " sendReaction -g " + messageobject.getgroupinfo() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e " + thumb,
+        #         auto_remove=True,
+        #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+        #     )
         else:
             client.containers.run(
                 SIGNALCLIIMAGE,
