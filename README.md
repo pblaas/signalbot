@@ -43,3 +43,4 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !names - random names based on python haikunator implementation
 * !launch - return lanched message and send source a image of impact.
 
+https://www.webfx.com/tools/emoji-cheat-sheet/
