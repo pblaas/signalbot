@@ -39,3 +39,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !hal - hal quotes from 2001 a space oddysee
 * !sexy - sexy images
 * !tss - http://quotes.rest/qod.json?category=inspire
+* !haiku - show japanese poem
+* !names - random names based on python haikunator implementation
+* !launch - return lanched message and send source a image of impact.
+
