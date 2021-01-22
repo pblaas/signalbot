@@ -7,6 +7,7 @@ import json
 import urllib3
 import shutil
 from random import randint
+from haikunator import Haikunator
 
 
 class SwitchCase:
@@ -34,6 +35,7 @@ class SwitchCase:
         !chuck
         !gif
         !haiku
+        !names
         """
 
     def test(self):
@@ -71,7 +73,8 @@ class SwitchCase:
 
     def random(self):
         """Return a random number between 0 and 1000."""
-        return str(random.randrange(1000))
+        haikunator = Haikunator()
+        return haikunator.haikunate(token_length=0, delimiter=' ')
 
     def haiku(self):
         """Return a random generator Haiku."""
@@ -96,3 +99,5 @@ class SwitchCase:
         haiku = haiku + wordList6[wordIndex6] + " " + wordList7[wordIndex7] + "."
 
         return haiku
+
+    names = random
