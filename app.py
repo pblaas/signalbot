@@ -146,6 +146,7 @@ def run_signalcli(messageobject):
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
 
+
 if __name__ == '__main__':
 
     print("Signal bot " + __version__ + " started.")
