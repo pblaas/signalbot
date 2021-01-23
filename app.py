@@ -6,6 +6,8 @@ import json
 import time
 import docker
 import subprocess
+import logging
+import sys
 from message import Message
 from botfunctions import SwitchCase
 
@@ -16,6 +18,8 @@ REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
 SIGNALEXECUTORLOCAL = True
+
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 def init_program():
