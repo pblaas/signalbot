@@ -1,4 +1,4 @@
-# python
+"""Simple test script."""
 import urllib3
 import json
 import pprint
