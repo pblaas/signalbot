@@ -5,7 +5,6 @@ import pprint
 import json
 import time
 import docker
-# import emoji
 import subprocess
 from message import Message
 from botfunctions import SwitchCase
@@ -154,4 +153,4 @@ if __name__ == '__main__':
     print("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
     while True:
         init_program()
-        time.sleep(5)
+        time.sleep(2)
