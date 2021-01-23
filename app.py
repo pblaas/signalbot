@@ -13,7 +13,7 @@ from botfunctions import SwitchCase
 
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
@@ -48,9 +48,9 @@ def init_program():
                 parse_message(value)
 
     except docker.errors.NotFound:
-        print("Unable to retreive container. Please verify container.")
+        logging.error("Unable to retreive container. Please verify container.")
     except docker.errors.APIError as e_error:
-        print("Docker API error due to: " + e_error)
+        logging.error("Docker API error due to: " + e_error)
 
 
 def parse_message(value):
@@ -68,10 +68,10 @@ def parse_message(value):
                     res['envelope']['syncMessage']['sentMessage']['timestamp']
                 )
                 if DEBUG:
-                    pprint.pprint(res)
-                    print(messageobject.getsource())
-                    print(messageobject.getgroupinfo())
-                    print(messageobject.getmessage())
+                    logging.info(pprint.pprint(res))
+                    logging.info(messageobject.getsource())
+                    logging.info(messageobject.getgroupinfo())
+                    logging.info(messageobject.getmessage())
                 run_signalcli(messageobject)
 
     if "dataMessage" in res['envelope']:
@@ -84,10 +84,10 @@ def parse_message(value):
                     res['envelope']['dataMessage']['timestamp']
                 )
                 if DEBUG:
-                    pprint.pprint(res)
-                    print(messageobject.getsource())
-                    print(messageobject.getgroupinfo())
-                    print(messageobject.getmessage())
+                    logging.info(pprint.pprint(res))
+                    logging.info(messageobject.getsource())
+                    logging.info(messageobject.getgroupinfo())
+                    logging.info(messageobject.getmessage())
                 run_signalcli(messageobject)
 
 
@@ -104,13 +104,7 @@ def run_signalcli(messageobject):
 
         if messageobject.getmessage() == "!gif":
             if SIGNALEXECUTORLOCAL:
-                # os.system("/signal/bin/signal-cli --config /config -u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/giphy.gif")
-                # subprocess.run(["/signal/bin/signal-cli --config /config -u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
-                # print(out)
-                print("Start gif process:")
-                # out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=True)                out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", groupid, "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
                 out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
-                print(out.stdout)
             else:
                 client.containers.run(
                     SIGNALCLIIMAGE,
@@ -152,9 +146,9 @@ def run_signalcli(messageobject):
 
 if __name__ == '__main__':
 
-    print("Signal bot " + __version__ + " started.")
-    print("Debug is " + str(DEBUG))
-    print("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
+    logging.info("Signal bot " + __version__ + " started.")
+    logging.info("Debug is " + str(DEBUG))
+    logging.info("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
     while True:
         init_program()
         time.sleep(2)
