@@ -6,6 +6,7 @@ import random
 import json
 import urllib3
 import shutil
+import emoji
 from random import randint
 from haikunator import Haikunator
 
@@ -13,10 +14,11 @@ from haikunator import Haikunator
 class SwitchCase:
     """SwitchCase class to switch bot functions."""
 
-    def __init__(self, version, author):
+    def __init__(self, version, author, signalexecutorlocal):
         """Initialize SwitchCase with version and author variables."""
         self._version = version
         self._author = author
+        self._signalexecutorlocal = signalexecutorlocal
 
     def switch(self, action):
         """Switch function to switch between available functions."""
@@ -36,6 +38,7 @@ class SwitchCase:
         !gif
         !haiku
         !names
+        !me
         """
 
     def test(self):
@@ -53,10 +56,15 @@ class SwitchCase:
         gif = json.loads(req_gif.data.decode('utf-8'))
         url = "https://i.giphy.com/media/" + gif['data']['id'] + "/giphy.gif"
 
-        home = os.environ['HOME']
-        with open(home + "/signal/giphy.gif", 'wb') as out:
-            r = http.request('GET', url, preload_content=False)
-            shutil.copyfileobj(r, out)
+        if self._signalexecutorlocal is False:
+            home = os.environ['HOME']
+            with open(home + "/signal/giphy.gif", 'wb') as out:
+                r = http.request('GET', url, preload_content=False)
+                shutil.copyfileobj(r, out)
+        else:
+            with open("/tmp/signal/giphy.gif", 'wb') as out:
+                r = http.request('GET', url, preload_content=False)
+                shutil.copyfileobj(r, out)
         return "Gif"
 
     def chuck(self):
@@ -101,3 +109,8 @@ class SwitchCase:
         return haiku
 
     names = random
+
+    def me(self):
+        """Return random Emoij"""
+        thumb = emoji.emojize(':eggplant:')
+        return thumb

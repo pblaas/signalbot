@@ -5,18 +5,18 @@ import pprint
 import json
 import time
 import docker
-import emoji
+# import emoji
 import subprocess
 from message import Message
 from botfunctions import SwitchCase
 
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.0.4"
+__version__ = "0.0.6"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
-SIGNALEXECUTORLOCAL = False
+SIGNALEXECUTORLOCAL = True
 
 
 def init_program():
@@ -92,7 +92,7 @@ def run_signalcli(messageobject):
     """Run SignalCLI and return messages."""
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
 
-        action = SwitchCase(__version__, __author__)
+        action = SwitchCase(__version__, __author__, SIGNALEXECUTORLOCAL)
         actionmessage = action.switch(messageobject.getmessage()).replace('"', '')
 
         if SIGNALEXECUTORLOCAL is False:
@@ -101,7 +101,13 @@ def run_signalcli(messageobject):
 
         if messageobject.getmessage() == "!gif":
             if SIGNALEXECUTORLOCAL:
-                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-a", "/tmp/giphy.gif"], stdout=subprocess.PIPE, text=True, check=True)
+                # os.system("/signal/bin/signal-cli --config /config -u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/giphy.gif")
+                # subprocess.run(["/signal/bin/signal-cli --config /config -u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
+                # print(out)
+                print("Start gif process:")
+                # out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=True)                out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", groupid, "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
+                out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
+                print(out.stdout)
             else:
                 client.containers.run(
                     SIGNALCLIIMAGE,
@@ -119,6 +125,16 @@ def run_signalcli(messageobject):
                     auto_remove=True,
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
+        elif messageobject.getmessage() == "!me":
+            if SIGNALEXECUTORLOCAL:
+                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "sendReaction", "-g", messageobject.getgroupinfo(), "-a", messageobject.getsource(), "-t", messageobject.gettimestamp(), "-e", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
+            else:
+                client.containers.run(
+                    SIGNALCLIIMAGE,
+                    "-u " + REGISTEREDNR + " sendReaction -g " + messageobject.getgroupinfo() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e " + thumb,
+                    auto_remove=True,
+                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                )
         else:
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
@@ -130,19 +146,6 @@ def run_signalcli(messageobject):
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
 
-    if messageobject.getsource() == "+31641832792":
-        thumb = emoji.emojize(':eggplant:')
-        if SIGNALEXECUTORLOCAL:
-            subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "sendReaction", "-g",  messageobject.getgroupinfo(), "-a", messageobject.getsource(), "-t", messageobject.gettimestamp(), "-e", thumb], stdout=subprocess.PIPE, text=True, check=True)
-        else:
-            client.containers.run(
-                SIGNALCLIIMAGE,
-                "-u " + REGISTEREDNR + " sendReaction -g " + messageobject.getgroupinfo() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e " + thumb,
-                auto_remove=True,
-                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-            )
-
-
 if __name__ == '__main__':
 
     print("Signal bot " + __version__ + " started.")
@@ -150,4 +153,4 @@ if __name__ == '__main__':
     print("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
     while True:
         init_program()
-        time.sleep(1)
+        time.sleep(5)
