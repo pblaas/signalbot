@@ -14,16 +14,17 @@ from haikunator import Haikunator
 class SwitchCase:
     """SwitchCase class to switch bot functions."""
 
-    def __init__(self, version, author, signalexecutorlocal):
+    def __init__(self, version, author, signalexecutorlocal, messageobject):
         """Initialize SwitchCase with version and author variables."""
         self._version = version
         self._author = author
         self._signalexecutorlocal = signalexecutorlocal
+        self._messageobject = messageobject
 
     def switch(self, action):
         """Switch function to switch between available functions."""
         default = "Invalid option."
-        return getattr(self, str(action)[1:], lambda: default)()
+        return getattr(self, str(action)[1:].split()[0], lambda: default)()
 
     def help(self):
         """Return all available commands."""
@@ -40,6 +41,7 @@ class SwitchCase:
         !names
         !me
         !hn
+        !twitch
         """
 
     def test(self):
@@ -130,3 +132,44 @@ class SwitchCase:
         """Return random Emoij."""
         thumb = emoji.emojize(':llama:')
         return "It really whips the " + thumb + " ass."
+
+    def twitch(self):
+        """Return game related content."""
+        twitchcase = SwitchCaseTwitch()
+        twitchfunctionreturn = twitchcase.switch(self._messageobject.split()[1]).replace('"', '')
+        return twitchfunctionreturn
+
+
+class SwitchCaseTwitch:
+    """SwitchCaseTwitch class to switch Twitch bot subfunctions."""
+
+    def switch(self, action):
+        """Switch function to switch between available functions."""
+        default = "Not a twitch function."
+        return getattr(self, str(action)[1:], lambda: default)()
+
+    def top(self, action):
+        """Switch function to show top 3 most popular streams."""
+        CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
+        CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
+        http = urllib3.PoolManager()
+        data = {'client_id': CLIENTID, 'client_secret': CLIENTSECRET, 'grant_type': "client_credentials"}
+        req_url = http.request(
+            "POST", "https://id.twitch.tv/oauth2/token",
+            body=json.dumps(data),
+            headers={'Content-Type': 'application/json'})
+        data = json.loads(req_url.data.decode('utf-8'))
+        # contains access token:
+        # data['access-token']
+        # pprint.pprint(data)
+
+        helix_url = http.request(
+            "GET", "https://api.twitch.tv/helix/games/top",
+            headers={
+                "Authorization": "Bearer " + data['access_token'],
+                "Client-Id": CLIENTID
+            })
+        # print(helix_url)
+        helixdata = json.loads(helix_url.data.decode('utf-8'))
+        # selection = data[:10]
+        return "Top streams |  1:" + helixdata['data'][0]['name'] + " 2:" + helixdata['data'][1]['name'] + " 3: " + helixdata['data'][2]['name']

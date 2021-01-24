@@ -13,7 +13,7 @@ from botfunctions import SwitchCase
 
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
@@ -95,7 +95,7 @@ def run_signalcli(messageobject):
     """Run SignalCLI and return messages."""
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
 
-        action = SwitchCase(__version__, __author__, SIGNALEXECUTORLOCAL)
+        action = SwitchCase(__version__, __author__, SIGNALEXECUTORLOCAL, messageobject.getmessage())
         actionmessage = action.switch(messageobject.getmessage()).replace('"', '')
 
         if SIGNALEXECUTORLOCAL is False:
