@@ -128,5 +128,5 @@ class SwitchCase:
 
     def winamp(self):
         """Return random Emoij."""
-        thumb = emoji.emojize(':horse:')
+        thumb = emoji.emojize(':llama:')
         return "It really whips the " + thumb + " ass."
