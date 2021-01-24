@@ -154,7 +154,7 @@ class SwitchCaseTwitch:
         default = "Not a twitch function."
         return getattr(self, str(action), lambda: default)()
 
-    def top(self):
+    def topgames(self):
         """Switch function to show top 3 most popular streams."""
         CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
         CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
@@ -179,10 +179,41 @@ class SwitchCaseTwitch:
         helixdata = json.loads(helix_url.data.decode('utf-8'))
         # selection = data[:10]
         return f"""
-        Top streams:
+        Top games:
         1: {helixdata['data'][0]['name']}
         2: {helixdata['data'][1]['name']}
         3: {helixdata['data'][2]['name']}
         4: {helixdata['data'][3]['name']}
         5: {helixdata['data'][4]['name']}
+        """
+
+    def topstreams(self):
+        """Switch function to show top 3 most popular streams."""
+        CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
+        CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
+        http = urllib3.PoolManager()
+        data = {'client_id': CLIENTID, 'client_secret': CLIENTSECRET, 'grant_type': "client_credentials"}
+        req_url = http.request(
+            "POST", "https://id.twitch.tv/oauth2/token",
+            body=json.dumps(data),
+            headers={'Content-Type': 'application/json'})
+        data = json.loads(req_url.data.decode('utf-8'))
+        # contains access token:
+        # data['access-token']
+        # pprint.pprint(data)
+
+        helix_url = http.request(
+            "GET", "https://api.twitch.tv/helix/streams",
+            headers={
+                "Authorization": "Bearer " + data['access_token'],
+                "Client-Id": CLIENTID
+            })
+        # print(helix_url)
+        helixdata = json.loads(helix_url.data.decode('utf-8'))
+        # selection = data[:10]
+        return f"""
+        Top Streams:
+        1: viewers: {helixdata['data'][0]['viewer_count']} {helixdata['data'][0]['user_name']} game: {helixdata['data'][0]['game_name']}
+        2: viewers: {helixdata['data'][1]['viewer_count']} {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
+        3: viewers: {helixdata['data'][2]['viewer_count']} {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
         """
