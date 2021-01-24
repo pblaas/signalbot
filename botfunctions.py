@@ -135,6 +135,7 @@ class SwitchCase:
 
     def twitch(self):
         """Return game related content."""
+        print("Messages Object: " + self._messageobject)
         twitchcase = SwitchCaseTwitch()
         twitchfunctionreturn = twitchcase.switch(self._messageobject.split()[1]).replace('"', '')
         return twitchfunctionreturn
@@ -146,7 +147,7 @@ class SwitchCaseTwitch:
     def switch(self, action):
         """Switch function to switch between available functions."""
         default = "Not a twitch function."
-        return getattr(self, str(action)[1:], lambda: default)()
+        return getattr(self, str(action), lambda: default)()
 
     def top(self, action):
         """Switch function to show top 3 most popular streams."""
