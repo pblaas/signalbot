@@ -18,6 +18,7 @@ REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
 SIGNALEXECUTORLOCAL = True
+DRYRUN = False
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
