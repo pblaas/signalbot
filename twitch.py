@@ -5,7 +5,7 @@ import urllib3
 import pprint
 
 
-def twitch(string):
+def twitch():
     """Twitch example function."""
     CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
     CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
@@ -21,17 +21,20 @@ def twitch(string):
     pprint.pprint(data)
 
     helix_url = http.request(
-        "GET", "https://api.twitch.tv/helix/games/top",
+        "POST", "https://api.igdb.com/v4/games",
         headers={
+            "Accept": "application/json",
             "Authorization": "Bearer " + data['access_token'],
             "Client-Id": CLIENTID
-        })
+        },
+        body="fields name,status,aggregated_rating,release_dates,version_title;"
+    )
     # print(helix_url)
     helixdata = json.loads(helix_url.data.decode('utf-8'))
     # selection = data[:10]
-    # pprint.pprint(helixdata)
+    pprint.pprint(helixdata)
     # print("String: " + string.split()[1])
-    print(helixdata['data'][1]['name'])
+    # print(helixdata['data'][1]['name'])
 
 
-twitch("twitch second third")
+twitch()
