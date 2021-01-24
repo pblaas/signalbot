@@ -133,6 +133,12 @@ class SwitchCase:
         thumb = emoji.emojize(':llama:')
         return "It really whips the " + thumb + " ass."
 
+    def dog(self):
+        """Return random Emoij."""
+        dog = emoji.emojize(':dog:')
+        dog2 = emoji.emojize(':dog2:')
+        return dog + " WOEF,  WAFFF! " + dog2
+
     def twitch(self):
         """Return game related content."""
         print("Messages Object: " + self._messageobject)
@@ -210,11 +216,10 @@ class SwitchCaseTwitch:
             })
         # print(helix_url)
         helixdata = json.loads(helix_url.data.decode('utf-8'))
-        tv = emoji.emojize(':tv:')
         # selection = data[:10]
         return f"""
         Top Streams:
-        1: {tv}: {helixdata['data'][0]['viewer_count']} {helixdata['data'][0]['user_name']} game: {helixdata['data'][0]['game_name']}
-        2: {tv}: {helixdata['data'][1]['viewer_count']} {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
-        3: {tv}: {helixdata['data'][2]['viewer_count']} {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
+        1: viewers: {helixdata['data'][0]['viewer_count']} {helixdata['data'][0]['user_name']} game: {helixdata['data'][0]['game_name']}
+        2: viewers: {helixdata['data'][1]['viewer_count']} {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
+        3: viewers: {helixdata['data'][2]['viewer_count']} {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
         """
