@@ -136,8 +136,7 @@ class SwitchCase:
     def dog(self):
         """Return random Emoij."""
         dog = emoji.emojize(':dog:')
-        dog2 = emoji.emojize(':dog2:')
-        return dog + " WOEF,  WAFFF! " + dog2
+        return dog + " WOEF,  WAFFF! " + dog
 
     def twitch(self):
         """Return game related content."""
