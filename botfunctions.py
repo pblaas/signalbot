@@ -137,7 +137,12 @@ class SwitchCase:
         """Return game related content."""
         print("Messages Object: " + self._messageobject)
         twitchcase = SwitchCaseTwitch()
-        twitchfunctionreturn = twitchcase.switch(self._messageobject.split()[1]).replace('"', '')
+        if len(self._messageobject.strip().split(" ")) > 1:
+            message = self._messageobject.split()[1]
+        else:
+            message = "default"
+
+        twitchfunctionreturn = twitchcase.switch(message).replace('"', '')
         return twitchfunctionreturn
 
 
