@@ -178,4 +178,11 @@ class SwitchCaseTwitch:
         # print(helix_url)
         helixdata = json.loads(helix_url.data.decode('utf-8'))
         # selection = data[:10]
-        return "Top streams |  1:" + helixdata['data'][0]['name'] + " 2:" + helixdata['data'][1]['name'] + " 3: " + helixdata['data'][2]['name']
+        return f"""
+        Top streams:
+        1: {helixdata['data'][0]['name']}
+        2: {helixdata['data'][1]['name']}
+        3: {helixdata['data'][2]['name']}
+        4: {helixdata['data'][3]['name']}
+        5: {helixdata['data'][4]['name']}
+        """
