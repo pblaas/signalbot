@@ -154,7 +154,7 @@ class SwitchCaseTwitch:
         default = "Not a twitch function."
         return getattr(self, str(action), lambda: default)()
 
-    def top(self, action):
+    def top(self):
         """Switch function to show top 3 most popular streams."""
         CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
         CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
