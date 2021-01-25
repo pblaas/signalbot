@@ -29,19 +29,24 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 
 ## bot ideas
 * !chuck - show random chuck norris joke [DONE]
-* !gif  - show random gif from Giphy [DONE]
+* !gif  - show random gif from Giphy [DONE] [API] [APIKEY]
 * !weather - show weather 
+* !flip - Flip a coin heads or tails [DONE]
 * !news - parse latest news from site x
-* !me - return with random reply 
+* !me - return with random reply [DONE]
 * !version - show version [DONE]
 * !help - show available commands [DONE]
 * !ai - return interesting AI facts?
-* !hal - hal quotes from 2001 a space oddysee
 * !sexy - sexy images
-* !tss - http://quotes.rest/qod.json?category=inspire
-* !haiku - show japanese poem
-* !names - random names based on python haikunator implementation
+* !haiku - show japanese poem [DONE]
+* !names - random names based on python haikunator implementation [DONE]
 * !launch - return lanched message and send source a image of impact.
+* !trivia - return trivia questions [API]
+* !twitch - Return twitch and game related info [DONE] [API] [APIKEY]
+* !bored - Returns random activities [DONE]  [API]
+* !dog - Return short message with Emoji [DONE] 
+* !winamp - Returns winamp slogan with Emoji [DONE]
+* !hn - Returns random hacker news [DONE]
 
 https://www.webfx.com/tools/emoji-cheat-sheet/
 
