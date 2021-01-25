@@ -3,6 +3,7 @@
 import random
 import json
 import urllib3
+import html
 
 
 def trivia():
@@ -15,10 +16,10 @@ def trivia():
     random.shuffle(all_answers)
     str = ","
     shuffled_string = str.join(all_answers)
-    return f"""Trivia:
-    {trivia_data['results'][0]['question']}
+    print(f"""Trivia:
+    {html.unescape(trivia_data['results'][0]['question'])}
     Options: {shuffled_string}
-    """
+    """)
 
 
 trivia()
