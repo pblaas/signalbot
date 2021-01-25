@@ -166,7 +166,7 @@ class SwitchCase:
         req_return = http.request('GET', 'https://opentdb.com/api.php?amount=1')
         trivia_data = json.loads(req_return.data.decode('utf-8'))
         incorrect_answers = trivia_data['results'][0]['incorrect_answers']
-        all_answers = incorrect_answers.insert(trivia_data['results'][0]['correct_answers'])
+        all_answers = incorrect_answers.append(trivia_data['results'][0]['correct_answer'])
         shuffled_answers = random.shuffle(all_answers)
         str = ","
         shuffled_string = str.join(shuffled_answers)
