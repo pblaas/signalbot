@@ -160,15 +160,20 @@ class SwitchCase:
         # pprint.pprint(chuck)
         return activity_data['activity']
 
-    #https://opentdb.com/api.php?amount=1
-
     def trivia(self):
         """Get random jokes from chucknorris API."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://opentdb.com/api.php?amount=1')
         trivia_data = json.loads(req_return.data.decode('utf-8'))
-        # pprint.pprint(chuck)
-        return trivia_data['results'][0]['question']
+        incorrect_answers = trivia_data['results'][0]['incorrect_answers']
+        all_answers = incorrect_answers.insert(trivia_data['results'][0]['correct_answers'])
+        shuffled_answers = random.shuffle(all_answers)
+        str = ","
+        shuffled_string = str.join(shuffled_answers)
+        return f"""Trivia:
+        {trivia_data['results'][0]['question']}
+        Options: {shuffled_string}
+        """
 
     def twitch(self):
         """Return game related content."""
