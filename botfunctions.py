@@ -228,9 +228,10 @@ class SwitchCaseTwitch:
         # print(helix_url)
         helixdata = json.loads(helix_url.data.decode('utf-8'))
         # selection = data[:10]
+        movie_camera = emoji.emojize(':movie_camera:')
         return f"""
         Top Streams:
-        1: viewers: {helixdata['data'][0]['viewer_count']} {helixdata['data'][0]['user_name']} game: {helixdata['data'][0]['game_name']}
-        2: viewers: {helixdata['data'][1]['viewer_count']} {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
-        3: viewers: {helixdata['data'][2]['viewer_count']} {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
+        1: {movie_camera}: {helixdata['data'][0]['viewer_count']} {helixdata['data'][0]['user_name']} game: {helixdata['data'][0]['game_name']}
+        2: {movie_camera}: {helixdata['data'][1]['viewer_count']} {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
+        3: {movie_camera}: {helixdata['data'][2]['viewer_count']} {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
         """
