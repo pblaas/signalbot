@@ -204,6 +204,9 @@ class SwitchCaseTwitch:
         5: {helixdata['data'][4]['name']}
         """
 
+    # Adding alias to topgames
+    tg = topgames
+
     def topstreams(self):
         """Switch function to show top 3 most popular streams."""
         CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
@@ -235,3 +238,6 @@ class SwitchCaseTwitch:
         2: {movie_camera}: {helixdata['data'][1]['viewer_count']} {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
         3: {movie_camera}: {helixdata['data'][2]['viewer_count']} {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
         """
+
+    # Adding alias to topstreams
+    ts = topstreams
