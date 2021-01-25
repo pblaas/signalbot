@@ -42,6 +42,8 @@ class SwitchCase:
         !me
         !hn
         !twitch
+        !bored
+        !trivia
         """
 
     def test(self):
@@ -149,6 +151,24 @@ class SwitchCase:
         tomato = emoji.emojize(':tomato:')
 
         return tv2 + " " + movie_camera + " " + apple2 + " " + lemon + " " + pineapple + " " + pear + " " + tomato
+
+    def bored(self):
+        """Get random jokes from chucknorris API."""
+        http = urllib3.PoolManager()
+        req_return = http.request('GET', 'https://www.boredapi.com/api/activity?type=recreational')
+        activity_data = json.loads(req_return.data.decode('utf-8'))
+        # pprint.pprint(chuck)
+        return activity_data['activity']
+
+    #https://opentdb.com/api.php?amount=1
+
+    def trivia(self):
+        """Get random jokes from chucknorris API."""
+        http = urllib3.PoolManager()
+        req_return = http.request('GET', 'https://opentdb.com/api.php?amount=1')
+        trivia_data = json.loads(req_return.data.decode('utf-8'))
+        # pprint.pprint(chuck)
+        return trivia_data['results'][0]['question']
 
     def twitch(self):
         """Return game related content."""
