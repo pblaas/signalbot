@@ -3,6 +3,7 @@
 import os
 import random
 # import pprint
+import html
 import json
 import urllib3
 import shutil
@@ -160,7 +161,7 @@ class SwitchCase:
         # pprint.pprint(chuck)
         return activity_data['activity']
 
-    def trivia(self):
+    def trivia():
         """Get random jokes from chucknorris API."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://opentdb.com/api.php?amount=1')
@@ -171,7 +172,7 @@ class SwitchCase:
         str = ","
         shuffled_string = str.join(all_answers)
         return f"""Trivia:
-        {trivia_data['results'][0]['question']}
+        {html.unescape(trivia_data['results'][0]['question'])}
         Options: {shuffled_string}
         """
 
