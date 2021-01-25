@@ -46,7 +46,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !bored - Returns random activities [DONE]  [API]
 * !dog - Return short message with Emoji [DONE] 
 * !winamp - Returns winamp slogan with Emoji [DONE]
-* !hn - Returns random hacker news [DONE]
+* !hn - Returns random hacker news [DONE] [API]
 
 https://www.webfx.com/tools/emoji-cheat-sheet/
 
