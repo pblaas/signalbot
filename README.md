@@ -32,7 +32,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !gif  - show random gif from Giphy [DONE] [API] [APIKEY]
 * !weather - show weather 
 * !flip - Flip a coin heads or tails [DONE]
-* !news - parse latest news from site x
+* !gnews - parse latest news from gnews API. [API] [APIKEY]
 * !me - return with random reply [DONE]
 * !version - show version [DONE]
 * !help - show available commands [DONE]
