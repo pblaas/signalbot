@@ -161,7 +161,7 @@ class SwitchCase:
         # pprint.pprint(chuck)
         return activity_data['activity']
 
-    def trivia():
+    def trivia(self):
         """Get random jokes from chucknorris API."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://opentdb.com/api.php?amount=1')
