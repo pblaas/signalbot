@@ -138,6 +138,18 @@ class SwitchCase:
         dog = emoji.emojize(':dog:')
         return dog + " WOEF,  WAFFF! " + dog
 
+    def testemoji(self):
+        """Return random Emoij."""
+        tv = emoji.emojize(':tv:')
+        movie_camera = emoji.emojize(':movie_camera:')
+        apple = emoji.emojize(':apple:')
+        lemon = emoji.emojize(':lemon:')
+        pineapple = emoji.emojize(':pineapple:')
+        pear = emoji.emojize(':pear:')
+        tomato = emoji.emojize(':tomato:')
+
+        return tv + " " + movie_camera + " " + apple + " " + lemon + " " + pineapple + " " + pear + " " + tomato
+
     def twitch(self):
         """Return game related content."""
         print("Messages Object: " + self._messageobject)
