@@ -265,9 +265,9 @@ class SwitchCaseTwitch:
         movie_camera = emoji.emojize(':movie_camera:')
         return f"""
         Top Streams:
-        {movie_camera} {helixdata['data'][0]['viewer_count']} on streamer {helixdata['data'][0]['user_name']} game: {helixdata['data'][0]['game_name']}
-        {movie_camera} {helixdata['data'][1]['viewer_count']} on streamer {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
-        {movie_camera} {helixdata['data'][2]['viewer_count']} on streamer {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
+        {movie_camera} {helixdata['data'][0]['viewer_count']} viewing {helixdata['data'][0]['user_name']} game: {helixdata['data'][0]['game_name']}
+        {movie_camera} {helixdata['data'][1]['viewer_count']} viewing {helixdata['data'][1]['user_name']} game: {helixdata['data'][1]['game_name']}
+        {movie_camera} {helixdata['data'][2]['viewer_count']} viewing {helixdata['data'][2]['user_name']} game: {helixdata['data'][2]['game_name']}
         """
 
     # Adding alias to topstreams
