@@ -41,7 +41,6 @@ class SwitchCase:
         !gif
         !haiku
         !names
-        !me
         !hn
         !twitch
         !bored
