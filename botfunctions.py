@@ -195,7 +195,11 @@ class SwitchCaseTwitch:
 
     def switch(self, action):
         """Switch function to switch between available functions."""
-        default = "Not a twitch function."
+        default = """twitch subcommands:
+        topgames || tg
+        topstreams || ts
+        pcreleases || pcr
+        """
         return getattr(self, str(action), lambda: default)()
 
     def topgames(self):
