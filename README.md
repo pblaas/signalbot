@@ -28,7 +28,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 ```
 
 ## bot ideas
-* !chuck - show random chuck norris joke [DONE]
+* !chuck - show random chuck norris joke [DONE] [API]
 * !gif  - show random gif from Giphy [DONE] [API] [APIKEY]
 * !weather - show weather 
 * !flip - Flip a coin heads or tails [DONE]
@@ -41,7 +41,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !haiku - show japanese poem [DONE]
 * !names - random names based on python haikunator implementation [DONE]
 * !launch - return lanched message and send source a image of impact.
-* !trivia - return trivia questions [API]
+* !trivia - return trivia questions [DONE] [API]
 * !twitch - Return twitch and game related info [DONE] [API] [APIKEY]
 * !bored - Returns random activities [DONE]  [API]
 * !dog - Return short message with Emoji [DONE] 
