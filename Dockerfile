@@ -13,7 +13,7 @@ RUN mkdir -p /tmp/signal && \
 RUN mkdir /app && \
     chown -R nobody /app
 
-COPY app.py botfunctions.py message.py requirements.txt ./app/
+COPY app/ ./app/
 WORKDIR /app
 RUN pip install -r requirements.txt
 RUN chown -R nobody /app
