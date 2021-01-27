@@ -178,7 +178,6 @@ class SwitchCase:
 
     def twitch(self):
         """Return game related content."""
-        print("Messages Object: " + self._messageobject)
         twitchcase = SwitchCaseTwitch()
         if len(self._messageobject.strip().split(" ")) > 1:
             message = self._messageobject.split()[1]
@@ -187,6 +186,16 @@ class SwitchCase:
 
         twitchfunctionreturn = twitchcase.switch(message).replace('"', '')
         return twitchfunctionreturn
+
+    def gnews(self):
+        """Return news related content."""
+        if len(self._messageobject.strip().split(" ")) > 1:
+            gnewscase = SwitchCaseGnews(self._messageobject.split()[1])
+        else:
+            gnewscase = SwitchCaseGnews('science')
+
+        gnewsreturn = gnewscase.query().replace('"', '')
+        return gnewsreturn
 
 
 class SwitchCaseTwitch:
@@ -341,3 +350,32 @@ class SwitchCaseTwitch:
         """
     # Aliases for pcreleases
     pcr = pcreleases
+
+
+class SwitchCaseGnews:
+    """SwitchCaseGnews class to switch gnews bot subfunctions."""
+
+    def __init__(self, query):
+        """Initialize SwitchCase with version and author variables."""
+        self.query = query
+
+    def query(self):
+        """Switch function to switch between available functions."""
+        default = """gnews subcommands:
+        yourquery
+        """
+        return getattr(self, 'fetch', lambda: default)()
+
+    def fetch(self):
+        """Get news from gnews API."""
+        APITOKEN = '3zhnLmjmyvvmVYHF1gB8m8z2WdjDtGjPyqvUOdXMeOxTkkNYnB84on9YGMzQ'
+        reqinfo = self.query
+        http = urllib3.PoolManager()
+        req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + APITOKEN)
+        all_news = json.loads(req_return.data.decode('utf-8'))
+        total_articles = len(all_news['articles'])
+        random_article_number = random.randint(0, total_articles)
+        return(f"""
+        {all_news['articles'][random_article_number]['title']} -> {all_news['articles'][random_article_number]['article_url']}
+        """)
+        # return al['value']
