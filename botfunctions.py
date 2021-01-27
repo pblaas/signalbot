@@ -45,6 +45,7 @@ class SwitchCase:
         !twitch
         !bored
         !trivia
+        !gnews
         """
 
     def test(self):
@@ -190,7 +191,7 @@ class SwitchCase:
     def gnews(self):
         """Return news related content."""
         if len(self._messageobject.strip().split(" ")) > 1:
-            gnewscase = SwitchCaseGnews(self._messageobject.split()[1])
+            gnewscase = SwitchCaseGnews(self._messageobject.strip().split(" ")[1])
         else:
             gnewscase = SwitchCaseGnews('science')
 
@@ -357,7 +358,7 @@ class SwitchCaseGnews:
 
     def __init__(self, query):
         """Initialize SwitchCase with version and author variables."""
-        self.query = query
+        self._query = query
 
     def query(self):
         """Switch function to switch between available functions."""
@@ -369,7 +370,7 @@ class SwitchCaseGnews:
     def fetch(self):
         """Get news from gnews API."""
         APITOKEN = '3zhnLmjmyvvmVYHF1gB8m8z2WdjDtGjPyqvUOdXMeOxTkkNYnB84on9YGMzQ'
-        reqinfo = self.query
+        reqinfo = self._query
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + APITOKEN)
         all_news = json.loads(req_return.data.decode('utf-8'))
