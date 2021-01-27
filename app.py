@@ -73,7 +73,10 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                run_signalcli(messageobject)
+                if DRYRUN is False:
+                    run_signalcli(messageobject)
+                else:
+                    logging.info("Dry run active.")
 
     if "dataMessage" in res['envelope']:
         if "message" in res['envelope']['dataMessage']:
@@ -89,7 +92,10 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                run_signalcli(messageobject)
+                if DRYRUN is False:
+                    run_signalcli(messageobject)
+                else:
+                    logging.info("Dry run active.")
 
 
 def run_signalcli(messageobject):
@@ -150,6 +156,7 @@ if __name__ == '__main__':
     logging.info("Signal bot " + __version__ + " started.")
     logging.info("Debug is " + str(DEBUG))
     logging.info("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
+    logging.info("Dry run is " + str(DRYRUN))
     while True:
         init_program()
         time.sleep(2)
