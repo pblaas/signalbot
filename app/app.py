@@ -13,12 +13,12 @@ from botfunctions import SwitchCase
 
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.0.11"
+__version__ = "0.1.1"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
 SIGNALEXECUTORLOCAL = False
-PASSIVE = True
+PASSIVE = False
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
