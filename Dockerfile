@@ -11,13 +11,12 @@ RUN mkdir -p /tmp/signal && \
     chown nobody /tmp/signal
 
 RUN mkdir /app && \
-    chown -R nobody /app
+    chown -R nobody /signalbot
 
-COPY app/ ./app/
-WORKDIR /app
+COPY signalbot/ ./signalbot/
 RUN pip install -r requirements.txt
-RUN chown -R nobody /app
+RUN chown -R nobody /signalbot
 
 USER nobody
 
-ENTRYPOINT ["python3", "app.py"]
+ENTRYPOINT ["python3", "/signalbot"]
