@@ -17,8 +17,8 @@ __version__ = "0.0.11"
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
-SIGNALEXECUTORLOCAL = True
-DRYRUN = False
+SIGNALEXECUTORLOCAL = False
+PASSIVE = True
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -73,10 +73,10 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                if DRYRUN is False:
+                if PASSIVE is False:
                     run_signalcli(messageobject)
                 else:
-                    logging.info("Dry run active.")
+                    logging.info("Passive mode active.")
 
     if "dataMessage" in res['envelope']:
         if "message" in res['envelope']['dataMessage']:
@@ -92,10 +92,10 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                if DRYRUN is False:
+                if PASSIVE is False:
                     run_signalcli(messageobject)
                 else:
-                    logging.info("Dry run active.")
+                    logging.info("Passive mode active.")
 
 
 def run_signalcli(messageobject):
@@ -156,7 +156,7 @@ if __name__ == '__main__':
     logging.info("Signal bot " + __version__ + " started.")
     logging.info("Debug is " + str(DEBUG))
     logging.info("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
-    logging.info("Dry run is " + str(DRYRUN))
+    logging.info("Passive mode  " + str(PASSIVE))
     while True:
         init_program()
         time.sleep(2)
