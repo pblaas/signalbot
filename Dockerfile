@@ -10,10 +10,11 @@ RUN apt-get update && \
 RUN mkdir -p /tmp/signal && \
     chown nobody /tmp/signal
 
-RUN mkdir /app && \
+RUN mkdir /signalbot && \
     chown -R nobody /signalbot
 
 COPY signalbot/ ./signalbot/
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 RUN chown -R nobody /signalbot
 
