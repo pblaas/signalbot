@@ -33,6 +33,19 @@ class SwitchCaseTwitch:
         """
         return getattr(self, str(action), lambda: default)()
 
+    def _getaccestoken(self):
+        """Retrieve access token."""
+        CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
+        CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
+        http = urllib3.PoolManager()
+        data = {'client_id': CLIENTID, 'client_secret': CLIENTSECRET, 'grant_type': "client_credentials"}
+        req_url = http.request(
+            "POST", "https://id.twitch.tv/oauth2/token",
+            body=json.dumps(data),
+            headers={'Content-Type': 'application/json'})
+        data = json.loads(req_url.data.decode('utf-8'))
+        return data['access_token']
+
     def topgames(self):
         """Switch function to show top 3 most popular streams."""
         CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
