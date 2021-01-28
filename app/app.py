@@ -18,7 +18,7 @@ REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
 SIGNALEXECUTORLOCAL = False
-PASSIVE = True
+PASSIVE = False
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -119,7 +119,7 @@ def run_signalcli(messageobject):
                     auto_remove=True,
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
-        elif messageobject.getmessage() == "!random":
+        elif messageobject.getmessage() == "!rand":
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "updateGroup", "-g", messageobject.getgroupinfo(), "-n", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
             else:
