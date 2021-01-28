@@ -6,7 +6,7 @@ import emoji
 from datetime import datetime, date
 
 
-class Base():
+class Twitch():
     """Defining base class for inheritence."""
 
     def twitch(self):

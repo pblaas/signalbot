@@ -3,7 +3,7 @@
 from random import randint
 
 
-class Base:
+class Haiku:
     """Defining base class for inheritence."""
 
     def haiku(self):

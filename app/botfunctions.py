@@ -1,12 +1,12 @@
 """Collection of Bot functions."""
 
-from functions import help, test, version, gif, chuck, flip, rand, haiku, me, bored, trivia, gnews, twitch, hn, dog, winamp
+import functions
 
 
 class SwitchCase(
-    help.Base, test.Base, version.Base, gif.Base, chuck.Base, flip.Base, rand.Base,
-    haiku.Base, me.Base, bored.Base, hn.Base, dog.Base, winamp.Base,
-    trivia.Base, gnews.Base, twitch.Base
+    functions.Help, functions.Bored, functions.Chuck, functions.Dog, functions.Flip, functions.Gif,
+    functions.Gnews, functions.Haiku, functions.Hn, functions.Me, functions.Rand, functions.Test,
+    functions.Trivia, functions.Twitch, functions.Version, functions.Winamp
 ):
     """SwitchCase class to switch bot functions."""
 

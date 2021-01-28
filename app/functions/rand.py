@@ -3,7 +3,7 @@
 from haikunator import Haikunator
 
 
-class Base:
+class Rand:
     """Defining base class for inheritence."""
 
     def rand(self):

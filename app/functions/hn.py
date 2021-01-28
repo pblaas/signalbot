@@ -6,7 +6,7 @@ import emoji
 from random import randint
 
 
-class Base:
+class Hn:
     """Defining base class for inheritence."""
 
     def hn(self):

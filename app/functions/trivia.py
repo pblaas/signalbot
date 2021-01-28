@@ -6,7 +6,7 @@ import random
 import html
 
 
-class Base:
+class Trivia:
     """Defining base class for inheritence."""
 
     def trivia(self):

@@ -5,7 +5,7 @@ import json
 import random
 
 
-class Base():
+class Gnews():
     """Defining base class for inheritence."""
 
     def gnews(self):

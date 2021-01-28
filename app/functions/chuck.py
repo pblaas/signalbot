@@ -4,7 +4,7 @@ import urllib3
 import json
 
 
-class Base:
+class Chuck:
     """Defining base class for inheritence."""
 
     def chuck(self):

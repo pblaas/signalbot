@@ -4,7 +4,7 @@ import urllib3
 import json
 
 
-class Base:
+class Bored:
     """Defining base class for inheritence."""
 
     def bored(self):

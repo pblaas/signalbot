@@ -1,7 +1,7 @@
 """Test module."""
 
 
-class Base:
+class Test:
     """Defining base class for inheritence."""
 
     def test(self):

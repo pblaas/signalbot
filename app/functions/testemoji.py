@@ -3,7 +3,7 @@
 import emoji
 
 
-class Base:
+class TestEmoji:
     """Defining base class for inheritence."""
 
     def testemoji(self):

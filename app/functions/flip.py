@@ -3,7 +3,7 @@
 import random
 
 
-class Base:
+class Flip:
     """Defining base class for inheritence."""
 
     def flip(self):

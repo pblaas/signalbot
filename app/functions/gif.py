@@ -6,7 +6,7 @@ import os
 import shutil
 
 
-class Base:
+class Gif:
     """Defining base class for inheritence."""
 
     def gif(self):

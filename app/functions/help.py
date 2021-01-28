@@ -1,7 +1,7 @@
 """Help module."""
 
 
-class Base:
+class Help:
     """Defining base class for inheritence."""
 
     def help(self):

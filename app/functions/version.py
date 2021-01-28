@@ -1,7 +1,7 @@
 """Version module."""
 
 
-class Base:
+class Version:
     """Defining base class for inheritence."""
 
     def version(self):

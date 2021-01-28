@@ -3,7 +3,7 @@
 import emoji
 
 
-class Base:
+class Winamp:
     """Defining base class for inheritence."""
 
     def winamp(self):
