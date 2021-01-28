@@ -14,6 +14,7 @@ from botfunctions import SwitchCase
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
 __version__ = "0.1.2"
+
 REGISTEREDNR = "+31630030905"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 DEBUG = True
