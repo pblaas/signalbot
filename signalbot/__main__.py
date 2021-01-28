@@ -8,27 +8,47 @@ import docker
 import subprocess
 import logging
 import sys
+from distutils.util import strtobool
 from message import Message
 from botfunctions import SwitchCase
 
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.1.2"
-
-REGISTEREDNR = "+31630030905"
+__version__ = "0.1.3"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
-DEBUG = True
-SIGNALEXECUTORLOCAL = False
-PASSIVE = False
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+if not os.environ.get('REGISTEREDNR'):
+    raise Exception('Variable REGISTEREDNR is not exported.')
+
+try:
+    REGISTEREDNR = os.environ.get('REGISTEREDNR')
+except:
+    raise
+
+if os.environ.get('DEBUG'):
+    DEBUG = bool(strtobool(os.environ.get('DEBUG')))
+else:
+    DEBUG = False
+
+if os.environ.get('SIGNALEXECUTORLOCAL'):
+    SIGNALEXECUTORLOCAL = bool(strtobool(os.environ.get('SIGNALEXECUTORLOCAL')))
+else:
+    SIGNALEXECUTORLOCAL = True
+
+if os.environ.get('READY'):
+    READY = bool(strtobool(os.environ.get('READY')))
+else:
+    READY = False
 
 
 def init_program():
     """Initialize start of program."""
     try:
+
         home = os.environ['HOME']
-        if SIGNALEXECUTORLOCAL is False:
+        if not SIGNALEXECUTORLOCAL:
             client = docker.from_env()
         if SIGNALEXECUTORLOCAL:
             out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-o", "json", "-u", REGISTEREDNR, "receive"], stdout=subprocess.PIPE, text=True)
@@ -74,10 +94,10 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                if PASSIVE is False:
+                if READY:
                     run_signalcli(messageobject)
                 else:
-                    logging.info("Passive mode active.")
+                    logging.info("NOOP due to ready mode set to false.")
 
     if "dataMessage" in res['envelope']:
         if "message" in res['envelope']['dataMessage']:
@@ -93,10 +113,10 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                if PASSIVE is False:
+                if READY:
                     run_signalcli(messageobject)
                 else:
-                    logging.info("Passive mode active.")
+                    logging.info("NOOP due to ready mode set to false.")
 
 
 def run_signalcli(messageobject):
@@ -106,7 +126,7 @@ def run_signalcli(messageobject):
         action = SwitchCase(__version__, __author__, SIGNALEXECUTORLOCAL, messageobject.getmessage())
         actionmessage = action.switch(messageobject.getmessage()).replace('"', '')
 
-        if SIGNALEXECUTORLOCAL is False:
+        if not SIGNALEXECUTORLOCAL:
             client = docker.from_env()
             home = os.environ['HOME']
 
@@ -157,7 +177,7 @@ if __name__ == '__main__':
     logging.info("Signal bot " + __version__ + " started.")
     logging.info("Debug is " + str(DEBUG))
     logging.info("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
-    logging.info("Passive mode  " + str(PASSIVE))
+    logging.info("READY mode " + str(READY))
     while True:
         init_program()
         time.sleep(2)
