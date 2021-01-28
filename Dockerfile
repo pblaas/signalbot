@@ -2,6 +2,12 @@ FROM pblaas/signalcli:latest
 
 LABEL MAINTAINER="patrick@kite4fun.nl"
 
+
+ENV REGISTEREDNR=""
+ENV DEBUG=""
+ENV SIGNALEXECUTORLOCAL=""
+ENV READY=""
+
 USER root
 
 RUN apt-get update && \
