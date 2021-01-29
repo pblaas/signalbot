@@ -129,7 +129,7 @@ def run_signalcli(messageobject):
             client = docker.from_env()
             home = os.environ['HOME']
 
-        if messageobject.getmessage() == "!gif":
+        if messageobject.getmessage() == "!gif" and actionmessage == "Gif":
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
             else:
