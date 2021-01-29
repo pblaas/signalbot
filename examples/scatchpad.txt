@@ -1,0 +1,54 @@
+{'envelope': {'dataMessage': {'attachments': [],
+                              'expiresInSeconds': 0,
+                              'groupInfo': {'groupId': 'OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI=',
+                                            'type': 'DELIVER'},
+                              'mentions': [{'length': 1,
+                                            'name': '+31630030905',
+                                            'start': 0}],
+                              'message': '￼ hallo',
+                              'timestamp': 1611316403160,
+                              'viewOnce': False},
+              'source': '+31645606468',
+              'sourceDevice': 1,
+              'timestamp': 1611316403160}}
++31645606468
+OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI=
+￼ hallo
+
+'😮'
+
+
+# python
+import urllib3
+import json
+import pprint
+import shutil
+import subprocess
+
+
+__author__ = "Patrick Blaas <patrick@kite4fun.nl>"
+__version__ = "0.0.4"
+REGISTEREDNR = "+31630030905"
+SIGNALCLIIMAGE = "pblaas/signalcli:latest"
+DEBUG = True
+SIGNALEXECUTORLOCAL = True
+
+http = urllib3.PoolManager()
+req_gif = http.request('GET', 'https://api.giphy.com/v1/gifs/random?api_key=elRcLdk25G3cllhDMki4ZIKLMxKqRPSW&tag=&rating=pg-13')
+gif = json.loads(req_gif.data.decode('utf-8'))
+pprint.pprint(gif)
+url = "https://i.giphy.com/media/" + gif['data']['id'] + "/giphy.gif"
+
+
+with open("/tmp/signal/giphy.gif", 'wb') as out:
+    r = http.request('GET', url, preload_content=False)
+    shutil.copyfileobj(r, out)
+
+# --config /config -u +31630030905 send -g OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI= -a /tmp/signal/giphy.gif
+groupid = "OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI="
+print("Start gif process:")
+out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", groupid, "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
+#input = "--config /config -u " + REGISTEREDNR + " send -g " + OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI= + " -m \"\"" + " -a /tmp/giphy.gif"
+#print(t)
+#out = subprocess.run(["/signal/bin/signal-cli", input], stdout=subprocess.PIPE, text=True, shell=False)
+print(out.stdout)
