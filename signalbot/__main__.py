@@ -24,8 +24,8 @@ if not os.environ.get('REGISTEREDNR'):
 
 try:
     REGISTEREDNR = os.environ.get('REGISTEREDNR')
-except:
-    raise
+except Exception as e:
+    raise e
 
 if os.environ.get('DEBUG'):
     DEBUG = bool(strtobool(os.environ.get('DEBUG')))
@@ -48,12 +48,11 @@ def init_program():
     try:
 
         home = os.environ['HOME']
-        if not SIGNALEXECUTORLOCAL:
-            client = docker.from_env()
         if SIGNALEXECUTORLOCAL:
             out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-o", "json", "-u", REGISTEREDNR, "receive"], stdout=subprocess.PIPE, text=True)
             output = out.stdout
         else:
+            client = docker.from_env()
             out = client.containers.run(
                 SIGNALCLIIMAGE,
                 "-o json -u " + REGISTEREDNR + " receive",
@@ -70,7 +69,7 @@ def init_program():
                 parse_message(value)
 
     except docker.errors.NotFound:
-        logging.error("Unable to retreive container. Please verify container.")
+        logging.error("Unable to retrieve container. Please verify container.")
     except docker.errors.APIError as e_error:
         logging.error("Docker API error due to: " + e_error)
 
