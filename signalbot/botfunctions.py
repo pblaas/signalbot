@@ -1,6 +1,6 @@
 """Collection of Bot functions."""
 
-import functions
+from signalbot import functions
 
 
 class SwitchCase(
