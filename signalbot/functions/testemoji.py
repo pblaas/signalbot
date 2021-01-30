@@ -17,3 +17,4 @@ class TestEmoji:
         tomato = emoji.emojize(':tomato:')
 
         return tv2 + " " + movie_camera + " " + apple2 + " " + lemon + " " + pineapple + " " + pear + " " + tomato
+
