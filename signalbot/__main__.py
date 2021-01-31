@@ -14,7 +14,7 @@ from botfunctions import SwitchCase
 
 
 __author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
