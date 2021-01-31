@@ -35,10 +35,11 @@ class SwitchCaseGnews:
 
     def fetch(self):
         """Get news from gnews API."""
-        APITOKEN = '3zhnLmjmyvvmVYHF1gB8m8z2WdjDtGjPyqvUOdXMeOxTkkNYnB84on9YGMzQ'
+        apikey = os.environ['GNEWS_APIKEY']
+        # APITOKEN = '3zhnLmjmyvvmVYHF1gB8m8z2WdjDtGjPyqvUOdXMeOxTkkNYnB84on9YGMzQ'
         reqinfo = self._query
         http = urllib3.PoolManager()
-        req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + APITOKEN)
+        req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
         all_news = json.loads(req_return.data.decode('utf-8'))
         total_articles = len(all_news['articles'])
         random_article_number = random.randint(0, total_articles)
