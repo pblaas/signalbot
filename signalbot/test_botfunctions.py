@@ -14,7 +14,7 @@ def test_switch_get_function_invalid_option(switchcase):
 
 
 def test_switch_get_function_flip(switchcase):
-    assert 'Heads' or 'Tails' == switchcase.switch('!flip')
+    assert 'Heads' or 'Tails2' == switchcase.switch('!flip')
 
 
 def test_switch_get_function_winamp(switchcase):
@@ -52,7 +52,6 @@ def test_switch_get_function_help(switchcase):
 
 
 def test_switch_get_function_haiku(switchcase):
-    #assert '' == switchcase.switch('!haiku')
     assert re.match(r'\w+\s\w+,\s\w+\s\w+\s\w+,\s\w+\s\w+', switchcase.switch('!haiku'))
 
 
