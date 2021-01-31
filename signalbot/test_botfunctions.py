@@ -14,7 +14,7 @@ def test_switch_get_function_invalid_option(switchcase):
 
 
 def test_switch_get_function_flip(switchcase):
-    assert 'Heads' or 'Tails2' == switchcase.switch('!flip')
+    assert switchcase.switch('!flip') in ['Heads', 'Tails']
 
 
 def test_switch_get_function_winamp(switchcase):
