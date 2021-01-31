@@ -7,7 +7,7 @@ import emoji
 from datetime import datetime, date
 
 
-class Twitch():
+class Twitch:
     """Defining base class for inheritence."""
 
     def twitch(self):
@@ -36,16 +36,19 @@ class SwitchCaseTwitch:
 
     def _getaccestoken(self):
         """Retrieve access token."""
-        clientid = os.environ['TWITCH_CLIENTID']
-        clientsecret = os.environ['TWITCH_CLIENTSECRET']
-        http = urllib3.PoolManager()
-        data = {'client_id': clientid, 'client_secret': clientsecret, 'grant_type': "client_credentials"}
-        req_url = http.request(
-            "POST", "https://id.twitch.tv/oauth2/token",
-            body=json.dumps(data),
-            headers={'Content-Type': 'application/json'})
-        data = json.loads(req_url.data.decode('utf-8'))
-        return data['access_token']
+        if "TWITCH_CLIENTID" in os.environ and "TWITCH_CLIENTSECRET" in os.environ:
+            clientid = os.environ['TWITCH_CLIENTID']
+            clientsecret = os.environ['TWITCH_CLIENTSECRET']
+            http = urllib3.PoolManager()
+            data = {'client_id': clientid, 'client_secret': clientsecret, 'grant_type': "client_credentials"}
+            req_url = http.request(
+                "POST", "https://id.twitch.tv/oauth2/token",
+                body=json.dumps(data),
+                headers={'Content-Type': 'application/json'})
+            data = json.loads(req_url.data.decode('utf-8'))
+            return data['access_token']
+        else:
+            return "No Twitch clientid and clientescret found."
 
     def topgames(self):
         """Switch function to show top 3 most popular streams."""
@@ -58,9 +61,6 @@ class SwitchCaseTwitch:
             body=json.dumps(data),
             headers={'Content-Type': 'application/json'})
         data = json.loads(req_url.data.decode('utf-8'))
-        # contains access token:
-        # data['access-token']
-        # pprint.pprint(data)
 
         helix_url = http.request(
             "GET", "https://api.twitch.tv/helix/games/top",
