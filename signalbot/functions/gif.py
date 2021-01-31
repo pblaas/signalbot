@@ -12,23 +12,28 @@ class Gif:
     def gif(self):
         """Get random gif images from Giphy platform."""
 
-        http = urllib3.PoolManager()
-        req_gif = http.request('GET', 'https://api.giphy.com/v1/gifs/random?api_key=elRcLdk25G3cllhDMki4ZIKLMxKqRPSW&tag=funny&rating=pg-13')
-        gif = json.loads(req_gif.data.decode('utf-8'))
+        # test if GIPHY_APIKEY exists before requesting source.
+        apikey = os.environ['GIPHY_APIKEY']
+        if apikey:
+            http = urllib3.PoolManager()
+            req_gif = http.request('GET', 'https://api.giphy.com/v1/gifs/random?api_key=' + apikey + '&tag=funny&rating=pg-13')
+            gif = json.loads(req_gif.data.decode('utf-8'))
 
-        if len(gif['data']) > 0:
-            url = "https://i.giphy.com/media/" + gif['data']['id'] + "/giphy.gif"
-            if self._signalexecutorlocal is False:
-                home = os.environ['HOME']
-                with open(home + "/signal/giphy.gif", 'wb') as out:
-                    r = http.request('GET', url, preload_content=False)
-                    shutil.copyfileobj(r, out)
+            if len(gif['data']) > 0:
+                url = "https://i.giphy.com/media/" + gif['data']['id'] + "/giphy.gif"
+                if self._signalexecutorlocal is False:
+                    home = os.environ['HOME']
+                    with open(home + "/signal/giphy.gif", 'wb') as out:
+                        r = http.request('GET', url, preload_content=False)
+                        shutil.copyfileobj(r, out)
+                else:
+                    with open("/tmp/signal/giphy.gif", 'wb') as out:
+                        r = http.request('GET', url, preload_content=False)
+                        shutil.copyfileobj(r, out)
+
+                return "Gif"
+
             else:
-                with open("/tmp/signal/giphy.gif", 'wb') as out:
-                    r = http.request('GET', url, preload_content=False)
-                    shutil.copyfileobj(r, out)
-
-            return "Gif"
-
+                return "No valid repsonse for Giphy API."
         else:
-            return "No valid repsonse for Giphy API."
+            return "No Giphy API key found."
