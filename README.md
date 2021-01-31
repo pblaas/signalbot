@@ -42,7 +42,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !names - random names based on python haikunator implementation [DONE]
 * !launch - return lanched message and send source a image of impact.
 * !trivia - return trivia questions [DONE] [API]
-* !twitch - Return twitch and game related info [DONE] [API] [OAUTH]
+* !twitch - Return twitch and game related info [DONE] [API] [OAUTH2]
 * !bored - Returns random activities [DONE]  [API]
 * !dog - Return short message with Emoji [DONE] 
 * !winamp - Returns winamp slogan with Emoji [DONE]
