@@ -35,10 +35,10 @@ class SwitchCaseTwitch:
 
     def _getaccestoken(self):
         """Retrieve access token."""
-        CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
-        CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
+        clientid = os.environ['TWITCH_CLIENTID']
+        clientsecret = os.environ['TWITCH_CLIENTSECRET']
         http = urllib3.PoolManager()
-        data = {'client_id': CLIENTID, 'client_secret': CLIENTSECRET, 'grant_type': "client_credentials"}
+        data = {'client_id': clientid, 'client_secret': clientsecret, 'grant_type': "client_credentials"}
         req_url = http.request(
             "POST", "https://id.twitch.tv/oauth2/token",
             body=json.dumps(data),
@@ -48,10 +48,10 @@ class SwitchCaseTwitch:
 
     def topgames(self):
         """Switch function to show top 3 most popular streams."""
-        CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
-        CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
+        clientid = os.environ['TWITCH_CLIENTID']
+        clientsecret = os.environ['TWITCH_CLIENTSECRET']
         http = urllib3.PoolManager()
-        data = {'client_id': CLIENTID, 'client_secret': CLIENTSECRET, 'grant_type': "client_credentials"}
+        data = {'client_id': clientid, 'client_secret': clientsecret, 'grant_type': "client_credentials"}
         req_url = http.request(
             "POST", "https://id.twitch.tv/oauth2/token",
             body=json.dumps(data),
@@ -65,7 +65,7 @@ class SwitchCaseTwitch:
             "GET", "https://api.twitch.tv/helix/games/top",
             headers={
                 "Authorization": "Bearer " + data['access_token'],
-                "Client-Id": CLIENTID
+                "Client-Id": clientid
             })
         # print(helix_url)
         helixdata = json.loads(helix_url.data.decode('utf-8'))
@@ -84,10 +84,10 @@ class SwitchCaseTwitch:
 
     def topstreams(self):
         """Switch function to show top 3 most popular streams."""
-        CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
-        CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
+        clientid = os.environ['TWITCH_CLIENTID']
+        clientsecret = os.environ['TWITCH_CLIENTSECRET']
         http = urllib3.PoolManager()
-        data = {'client_id': CLIENTID, 'client_secret': CLIENTSECRET, 'grant_type': "client_credentials"}
+        data = {'client_id': clientid, 'client_secret': clientsecret, 'grant_type': "client_credentials"}
         req_url = http.request(
             "POST", "https://id.twitch.tv/oauth2/token",
             body=json.dumps(data),
@@ -101,7 +101,7 @@ class SwitchCaseTwitch:
             "GET", "https://api.twitch.tv/helix/streams",
             headers={
                 "Authorization": "Bearer " + data['access_token'],
-                "Client-Id": CLIENTID
+                "Client-Id": clientid
             })
         # print(helix_url)
         helixdata = json.loads(helix_url.data.decode('utf-8'))
@@ -119,14 +119,14 @@ class SwitchCaseTwitch:
 
     def pcreleases(self):
         """Twitch example function."""
-        CLIENTID = "xu5vir3u0bdxub6q8r3qq50o9t0cik"
-        CLIENTSECRET = "ocqwwmooe78inxki55ugbnld1uz9rl"
+        clientid = os.environ['TWITCH_CLIENTID']
+        clientsecret = os.environ['TWITCH_CLIENTSECRET']
 
         now = datetime.now()
         timestamp = str(datetime.timestamp(now)).split(".")[0]
 
         http = urllib3.PoolManager()
-        data = {'client_id': CLIENTID, 'client_secret': CLIENTSECRET, 'grant_type': "client_credentials"}
+        data = {'client_id': clientid, 'client_secret': clientsecret, 'grant_type': "client_credentials"}
         req_url = http.request(
             "POST", "https://id.twitch.tv/oauth2/token",
             body=json.dumps(data),
@@ -141,7 +141,7 @@ class SwitchCaseTwitch:
             headers={
                 "Accept": "application/json",
                 "Authorization": "Bearer " + data['access_token'],
-                "Client-Id": CLIENTID
+                "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
             body="fields game; where game.platforms = 6 & date > " + timestamp + "; sort date asc; limit 3;"
@@ -170,7 +170,7 @@ class SwitchCaseTwitch:
             headers={
                 "Accept": "application/json",
                 "Authorization": "Bearer " + data['access_token'],
-                "Client-Id": CLIENTID
+                "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
             body="fields *; where id = (" + games + "); sort date asc; limit 3;"
