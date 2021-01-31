@@ -13,8 +13,8 @@ class Gif:
         """Get random gif images from Giphy platform."""
 
         # test if GIPHY_APIKEY exists before requesting source.
-        apikey = os.environ['GIPHY_APIKEY']
-        if apikey:
+        if "GIPHY_APIKEY" in os.environ:
+            apikey = os.environ['GIPHY_APIKEY']
             http = urllib3.PoolManager()
             req_gif = http.request('GET', 'https://api.giphy.com/v1/gifs/random?api_key=' + apikey + '&tag=funny&rating=pg-13')
             gif = json.loads(req_gif.data.decode('utf-8'))
