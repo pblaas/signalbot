@@ -2,6 +2,7 @@
 
 import urllib3
 import json
+import os
 import emoji
 from datetime import datetime, date
 
