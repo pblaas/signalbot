@@ -36,14 +36,15 @@ class SwitchCaseGnews:
     def fetch(self):
         """Get news from gnews API."""
         apikey = os.environ['GNEWS_APIKEY']
-        # APITOKEN = '3zhnLmjmyvvmVYHF1gB8m8z2WdjDtGjPyqvUOdXMeOxTkkNYnB84on9YGMzQ'
-        reqinfo = self._query
-        http = urllib3.PoolManager()
-        req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
-        all_news = json.loads(req_return.data.decode('utf-8'))
-        total_articles = len(all_news['articles'])
-        random_article_number = random.randint(0, total_articles)
-        return(f"""
-        {all_news['articles'][random_article_number]['title']} -> {all_news['articles'][random_article_number]['article_url']}
-        """)
-        # return al['value']
+        if apikey:
+            reqinfo = self._query
+            http = urllib3.PoolManager()
+            req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
+            all_news = json.loads(req_return.data.decode('utf-8'))
+            total_articles = len(all_news['articles'])
+            random_article_number = random.randint(0, total_articles)
+            return(f"""
+            {all_news['articles'][random_article_number]['title']} -> {all_news['articles'][random_article_number]['article_url']}
+            """)
+        else:
+            return "No Gnews API key found."
