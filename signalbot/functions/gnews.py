@@ -36,8 +36,8 @@ class SwitchCaseGnews:
 
     def fetch(self):
         """Get news from gnews API."""
-        apikey = os.environ['GNEWS_APIKEY']
-        if apikey:
+        if "GNEWS_APIKEY" in os.environ:
+            apikey = os.environ['GNEWS_APIKEY']
             reqinfo = self._query
             http = urllib3.PoolManager()
             req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
