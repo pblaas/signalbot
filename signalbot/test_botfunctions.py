@@ -1,4 +1,4 @@
-from signalbot.botfunctions import SwitchCase
+from botfunctions import SwitchCase
 import pytest
 import emoji
 import re

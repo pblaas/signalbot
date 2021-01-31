@@ -1,4 +1,4 @@
-from signalbot.message import Message
+from message import Message
 import pytest
 
 
