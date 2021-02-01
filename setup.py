@@ -8,5 +8,5 @@ setup(
     author='Patrick Blaas',
     author_email='patrick@kite4fun.nl',
     license='MIT',
-    install_requires=['pytest', 'pytest-html', 'pytest-cov', 'docker', 'haikunator', 'emoji', 'urllib3']
+    install_requires=['pytest', 'pytest-html', 'pytest-cov', 'pytest-dotenv', 'docker', 'haikunator', 'emoji', 'urllib3']
 )
