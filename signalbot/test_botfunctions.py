@@ -79,7 +79,7 @@ def test_switch_get_function_trivia(switchcase):
     assert 'Trivia:' and 'Options:' in switchcase.switch('!trivia')
 
 
-def test_switch_get_function_twitch(switchcase):
+def test_switch_get_function_twitch_without_option(switchcase):
     assert 'twitch subcommands' in switchcase.switch('!twitch')
 
 
