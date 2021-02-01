@@ -6,3 +6,5 @@ __pycache__
 .coverage
 .env
 setenv.sh
+/cov_html
+
