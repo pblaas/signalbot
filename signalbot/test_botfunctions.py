@@ -14,11 +14,11 @@ def test_switch_get_function_invalid_option(switchcase):
 
 
 def test_switch_get_function_bored(switchcase):
-    assert re.match(r'\w+\s\w+\s\w+', switchcase.switch('!bored'))
+    assert re.match(r'\w+\s\w+', switchcase.switch('!bored'))
 
 
 def test_switch_get_function_chuck(switchcase):
-    assert re.match(r'\w+\s\w+\s\w+', switchcase.switch('!chuck'))
+    assert re.match(r'\w+\s\w+', switchcase.switch('!chuck'))
 
 
 def test_switch_get_function_dog(switchcase):
