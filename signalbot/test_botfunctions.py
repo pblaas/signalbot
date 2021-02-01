@@ -1,4 +1,5 @@
 from botfunctions import SwitchCase
+from functions.twitch import SwitchCaseTwitch
 import pytest
 import emoji
 import re
@@ -7,6 +8,11 @@ import re
 @pytest.fixture
 def switchcase():
     return SwitchCase('7.7.7', 'Patrick', True, '')
+
+
+@pytest.fixture
+def switchcasetwitch():
+    return SwitchCaseTwitch()
 
 
 def test_switch_get_function_invalid_option(switchcase):
@@ -34,9 +40,8 @@ def test_switch_get_function_gif(switchcase):
     assert switchcase.switch('!gif') in ['Gif', 'No Giphy API key found.']
 
 
-@pytest.mark.skip("WIP")
 def test_switch_get_function_gnews(switchcase):
-    assert '' == switchcase.switch('!gnews')
+    assert re.match(r'Gnews:\s\w+\s\w+', switchcase.switch('!gnews'))
 
 
 def test_switch_get_function_haiku(switchcase):
@@ -81,6 +86,10 @@ def test_switch_get_function_trivia(switchcase):
 
 def test_switch_get_function_twitch_without_option(switchcase):
     assert 'twitch subcommands' in switchcase.switch('!twitch')
+
+
+def test_switch_get_function_twitch_topgames(switchcasetwitch):
+    assert '' == switchcasetwitch.switch("tg")
 
 
 def test_switch_get_function_version(switchcase):
