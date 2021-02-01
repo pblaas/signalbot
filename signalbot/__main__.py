@@ -11,10 +11,10 @@ import sys
 from distutils.util import strtobool
 from message import Message
 from botfunctions import SwitchCase
+from metadata import version, author
 
-
-__author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.1.4"
+__author__ = author
+__version__ = version
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
