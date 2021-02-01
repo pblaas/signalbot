@@ -13,29 +13,43 @@ def test_switch_get_function_invalid_option(switchcase):
     assert 'Invalid option.' == switchcase.switch('!invalid')
 
 
+def test_switch_get_function_bored(switchcase):
+    assert re.match(r'\w+\s\w+\s\w+', switchcase.switch('!bored'))
+
+
+def test_switch_get_function_chuck(switchcase):
+    assert re.match(r'\w+\s\w+\s\w+', switchcase.switch('!chuck'))
+
+
+def test_switch_get_function_dog(switchcase):
+    dog = emoji.emojize(':dog:')
+    assert dog + " WOEF,  WAFFF! " + dog == switchcase.switch('!dog')
+
+
 def test_switch_get_function_flip(switchcase):
     assert switchcase.switch('!flip') in ['Heads', 'Tails']
 
 
-def test_switch_get_function_winamp(switchcase):
-    thumb = emoji.emojize(':llama:')
-    assert 'It really whips the ' + thumb + ' ass.' == switchcase.switch('!winamp')
+@pytest.mark.skip("WIP")
+def test_switch_get_function_gif(switchcase):
+    assert '' == switchcase.switch('!gif')
 
 
-def test_switch_get_function_version(switchcase):
-    assert 'SignalCLI bot version: 7.7.7 by Patrick' == switchcase.switch('!version')
+@pytest.mark.skip("WIP")
+def test_switch_get_function_gnews(switchcase):
+    assert '' == switchcase.switch('!gnews')
 
 
-def test_switch_get_function_twitch(switchcase):
-    assert 'twitch subcommands' in switchcase.switch('!twitch')
+def test_switch_get_function_haiku(switchcase):
+    assert re.match(r'\w+\s\w+,\s\w+\s\w+\s\w+,\s\w+\s\w+', switchcase.switch('!haiku'))
 
 
-def test_switch_get_function_trivia(switchcase):
-    assert 'Trivia:' and 'Options:' in switchcase.switch('!trivia')
+def test_switch_get_function_help(switchcase):
+    assert 'cmnds' in switchcase.switch('!help')
 
 
-def test_switch_get_function_rand(switchcase):
-    assert re.match(r'\w+\s\w+', switchcase.switch('!rand'))
+def test_switch_get_function_hn(switchcase):
+    assert 'Hacker News' in switchcase.switch('!hn')
 
 
 def test_switch_get_function_me(switchcase):
@@ -43,21 +57,13 @@ def test_switch_get_function_me(switchcase):
     assert thumb == switchcase.switch('!me')
 
 
-def test_switch_get_function_hn(switchcase):
-    assert 'Hacker News' in switchcase.switch('!hn')
+def test_switch_get_function_rand(switchcase):
+    assert re.match(r'\w+\s\w+', switchcase.switch('!rand'))
 
 
-def test_switch_get_function_help(switchcase):
-    assert 'cmnds' in switchcase.switch('!help')
-
-
-def test_switch_get_function_haiku(switchcase):
-    assert re.match(r'\w+\s\w+,\s\w+\s\w+\s\w+,\s\w+\s\w+', switchcase.switch('!haiku'))
-
-
-@pytest.mark.skip("WIP")
-def test_switch_get_function_gnews(switchcase):
-    assert '' == switchcase.switch('!gnews')
+@pytest.mark.skip("Not implemented in switchcase")
+def test_switch_get_function_test(switchcase):
+    assert '@#*&ES&@#YF.. nooo you got me!' == switchcase.switch('!test')
 
 
 @pytest.mark.skip("Not implemented in switchcase")
@@ -72,6 +78,18 @@ def test_switch_get_function_testemoji(switchcase):
     assert tv2 + " " + movie_camera + " " + apple2 + " " + lemon + " " + pineapple + " " + pear + " " + tomato == switchcase.switch('!testemoji')
 
 
-@pytest.mark.skip("Not implemented in switchcase")
-def test_switch_get_function_test(switchcase):
-    assert '@#*&ES&@#YF.. nooo you got me!' == switchcase.switch('!test')
+def test_switch_get_function_trivia(switchcase):
+    assert 'Trivia:' and 'Options:' in switchcase.switch('!trivia')
+
+
+def test_switch_get_function_twitch(switchcase):
+    assert 'twitch subcommands' in switchcase.switch('!twitch')
+
+
+def test_switch_get_function_version(switchcase):
+    assert 'SignalCLI bot version: 7.7.7 by Patrick' == switchcase.switch('!version')
+
+
+def test_switch_get_function_winamp(switchcase):
+    thumb = emoji.emojize(':llama:')
+    assert 'It really whips the ' + thumb + ' ass.' == switchcase.switch('!winamp')
