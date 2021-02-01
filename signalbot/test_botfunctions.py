@@ -30,9 +30,8 @@ def test_switch_get_function_flip(switchcase):
     assert switchcase.switch('!flip') in ['Heads', 'Tails']
 
 
-@pytest.mark.skip("WIP")
 def test_switch_get_function_gif(switchcase):
-    assert '' == switchcase.switch('!gif')
+    assert switchcase.switch('!gif') in ['Gif', 'No Giphy API key found.']
 
 
 @pytest.mark.skip("WIP")
@@ -61,12 +60,10 @@ def test_switch_get_function_rand(switchcase):
     assert re.match(r'\w+\s\w+', switchcase.switch('!rand'))
 
 
-@pytest.mark.skip("Not implemented in switchcase")
 def test_switch_get_function_test(switchcase):
     assert '@#*&ES&@#YF.. nooo you got me!' == switchcase.switch('!test')
 
 
-@pytest.mark.skip("Not implemented in switchcase")
 def test_switch_get_function_testemoji(switchcase):
     tv2 = emoji.emojize(':tv2:')
     movie_camera = emoji.emojize(':movie_camera:')
