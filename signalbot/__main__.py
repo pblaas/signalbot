@@ -59,14 +59,14 @@ def init_program():
                 auto_remove=True,
                 volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
             )
-            output = out.decode('utf8')
+            output = out.decode('utf-8')
         lines = []
         for line in output.split("\n"):
             lines.append(line)
 
         for index, value in enumerate(lines):
             if value:
-                parse_message(value)
+                parse_message(value.replace(u"\u2018", "'").replace(u"\u2019", "'"))
 
     except docker.errors.NotFound:
         logging.error("Unable to retrieve container. Please verify container.")
