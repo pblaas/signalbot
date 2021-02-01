@@ -2,6 +2,7 @@
 
 from .help import Help
 from .test import Test
+from .testemoji import TestEmoji
 from .version import Version
 from .gif import Gif
 from .chuck import Chuck
@@ -17,4 +18,4 @@ from .hn import Hn
 from .dog import Dog
 from .winamp import Winamp
 
-__all__ = ('Help', 'Test', 'Version', 'Gif', 'Chuck', 'Flip', 'Rand', 'Haiku', 'Me', 'Bored', 'Trivia', 'Gnews', 'Twitch', 'Hn', 'Dog', 'Winamp')
+__all__ = ('Help', 'Test', 'TestEmoji', 'Version', 'Gif', 'Chuck', 'Flip', 'Rand', 'Haiku', 'Me', 'Bored', 'Trivia', 'Gnews', 'Twitch', 'Hn', 'Dog', 'Winamp')
