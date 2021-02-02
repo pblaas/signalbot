@@ -2,9 +2,9 @@ __pycache__
 /*/__pycache__
 /*/functions/__pycache__
 /*/functions/*/__pycache__
-/build
+build
 .coverage
 .env
 setenv.sh
-/cov_html
+cov_html
 
