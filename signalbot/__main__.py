@@ -19,33 +19,32 @@ SIGNALCLIIMAGE = "pblaas/signalcli:latest"
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
-if not os.environ.get('REGISTEREDNR'):
-    raise Exception('Variable REGISTEREDNR is not exported.')
-
-try:
+if 'REGISTEREDNR' not in os.environ:
+    logging.error("Mandatory variable not set: REGISTEREDNR")
+    exit(1)
+else:
     REGISTEREDNR = os.environ.get('REGISTEREDNR')
-except Exception as e:
-    raise e
 
-if os.environ.get('DEBUG'):
+if 'DEBUG' in os.environ:
     DEBUG = bool(strtobool(os.environ.get('DEBUG')))
 else:
     DEBUG = False
 
-if os.environ.get('SIGNALEXECUTORLOCAL'):
+if 'SIGNALEXECUTORLOCAL' in os.environ:
     SIGNALEXECUTORLOCAL = bool(strtobool(os.environ.get('SIGNALEXECUTORLOCAL')))
 else:
     SIGNALEXECUTORLOCAL = True
 
-if os.environ.get('READY'):
+if 'READY' in os.environ:
     READY = bool(strtobool(os.environ.get('READY')))
 else:
     READY = False
 
-if BLACKLIST in os.environ:
-    blacklist = os.environ.get('BLACKLIST')
+if 'BLACKLIST' in os.environ:
+    blacklist = os.environ.get('BLACKLIST').split(',')
 else:
     blacklist = []
+
 
 def init_program():
     """Initialize start of program."""
@@ -181,8 +180,8 @@ def run_signalcli(messageobject):
                 )
 
 
-def group_not_in_blacklist(messageobject, blacklist):
-    for groupid in blacklist:
+def group_not_in_blacklist(messageobject, blist):
+    for groupid in blist:
         if groupid == messageobject.getgroupinfo():
             return False
     return True
@@ -191,9 +190,10 @@ def group_not_in_blacklist(messageobject, blacklist):
 if __name__ == '__main__':
 
     logging.info("Signal bot " + __version__ + " started.")
-    logging.info("Debug is " + str(DEBUG))
-    logging.info("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
-    logging.info("READY mode " + str(READY))
+    logging.info("Debug " + str(DEBUG))
+    logging.info("Local Executor " + str(SIGNALEXECUTORLOCAL))
+    logging.info("READY " + str(READY))
+    logging.info("Blacklists: " + str(blacklist))
     while True:
         init_program()
         time.sleep(2)
