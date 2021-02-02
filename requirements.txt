@@ -6,3 +6,4 @@ pytest
 pytest-html
 pytest-cov
 pytest-dotenv
+coverage-badge
