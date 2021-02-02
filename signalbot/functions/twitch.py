@@ -34,7 +34,8 @@ class SwitchCaseTwitch:
         """
         return getattr(self, str(action), lambda: default)()
 
-    def _getaccestoken(self):
+    @staticmethod
+    def _getaccestoken():
         """Retrieve access token."""
         if "TWITCH_CLIENTID" in os.environ and "TWITCH_CLIENTSECRET" in os.environ:
             clientid = os.environ['TWITCH_CLIENTID']
