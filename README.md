@@ -1,11 +1,10 @@
-# signal-cli
-
+# SignalBot
 ![alt text](coverage.svg "Code coverage")
 
 ## Create intial config
-```buildoutcfg
+```
 mkdir $HOME/signal
-docker run -v $HOME/signal:/config --rm -it pblaas/signal-cli:latest link
+docker run -v $HOME/signal:/config --rm -it pblaas/signalcli:latest link
 ```
 
 
@@ -13,18 +12,18 @@ Paste entire tsdevice:/? string in https://www.nayuki.io/page/qr-code-generator-
 
 ## Start messaging
 After device is connected you can start sending messages:
-```buildoutcfg
-docker run -v $HOME/signal:/config --rm -it pblaas/signal-cli:latest -u YOURREGISTEREDNR send RECEIVER -m "your message"
+```
+docker run -v $HOME/signal:/config --rm -it pblaas/signalcli:latest -u YOURREGISTEREDNR send RECEIVER -m "your message"
 ```
 
 
 ## show CLI help
-```buildoutcfg
-docker run -v $HOME/signal:/config --rm -it pblaas/signal-cli:latest -h
+```
+docker run -v $HOME/signal:/config --rm -it pblaas/signalcli:latest -h
 ```
 
 ## having some fun
-```buildoutcfg
+```
 echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` | docker run -v $HOME/signal:/config --rm -i signal:dev -u +31630030905 send --g "2SElh8hai/NQTSNaBOpHKBc0BbYE90l1iQyXAQzfeoE="
 ```
 
@@ -65,6 +64,8 @@ The bot can run in two modes.
 * Docker engine
 * $HOME/signal directory which contains Signal user profile.
 * Giphy.com API key
+* Gnews API key
+* Twitch clientid and clientsecret
 
 
 ### Docker engine
@@ -79,11 +80,15 @@ The containers expect signal user profile configuration in /config. So when cont
 
 Local executor means the bot will run inside of a docker container and will also use the signal-cli command from inside of the container. 
 
-To set local executor mode change boolean on the top of the app.py to:
-`SIGNALEXECUTORLOCAL = True`
+Local executor mode is the default and expects the bot to run inside a container.
+There are two mandatory variables which need to be set in order for the bot to work.
+
+*   REGISTEREDNR - contains the phone number you registered with the Signal  messenger service.
+*   READY - Default set to False. In order for the Bot to respond it needs to be set to True.
+
 
 To start the bot run:
-```buildoutcfg
+```
 docker run -v $HOME/signal:/config --rm -it pblaas/signalbot
 ```
 
@@ -91,13 +96,20 @@ docker run -v $HOME/signal:/config --rm -it pblaas/signalbot
 
 The non local executor mode means the bot can be run in local python3 environment with all the requirements from requirements.txt installed. It will however use a docker container to fire response commands. 
 
-To set non-local executor mode change boolean on the top of the app.py to:
-`SIGNALEXECUTORLOCAL = False`
+To set non-local executor mode change the environment variable:
+`export SIGNALEXECUTORLOCAL=False`
+
+Just like the local executor mode you also need to set some mandatory flags in order for the bot
+to be useful.
+
+*   REGISTEREDNR - contains the phone number you registered with the Signal  messenger service.
+*   READY - Default set to False. In order for the Bot to respond it needs to be set to True.
+
 
 To start the bot run:
-```buildoutcfg
+```
 pip3 install -r requirements
-python3 app.py
+python signalbot/
 ```
 
 ## Linking or registering
@@ -107,7 +119,7 @@ The first step into using this app is making sure Signal CLI has a proper user p
 ### Linking
 
 To start a linking process with Signal CLI one should provide the link flag to signal-cli
-```buildoutcfg
+```
 signal-cli link
 ```
 
@@ -117,12 +129,12 @@ Use your Signal APP e.g on your phone to add additional devices by scanning the 
 ### Registering
 
 If you are not linking the bot to an existing account you can register the bot with the register flag.
-```buildoutcfg
+```
 signal-cli -u YOURPHONENUMBER register
 ```
 
 You will then receive a SMS message with validation code.
-```buildoutcfg
+```
 signal-cli -u YOURPHONENUMBER verify CODE
 ```
 
@@ -136,7 +148,7 @@ Reviewing some existing functions should give a good idea on how the bot can be 
 
 
 Testcases are written in Pytest and utilize a .env file with the required variables:
-```buildoutcfg
+```
 READY=False
 DEBUG=True
 SIGNALEXECUTORLOCAL=False
@@ -144,12 +156,13 @@ REGISTEREDNR="+316"
 GIPHY_APIKEY=""
 GNEWS_APIKEY=""
 TWITCH_CLIENTID=""
+BLACKLIST=""
 ```
 ## Running the Pytest testsuite
-```buildoutcfg
+```
 pytest signalbot/
 ```
 ## Run Pytest code coverage check
-```buildoutcfg
+```
 pytest --cov-report html:cov_html --cov=signalbot signalbot/
 ```
