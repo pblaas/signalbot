@@ -1,1 +1,10 @@
 __pycache__
+/*/__pycache__
+/*/functions/__pycache__
+/*/functions/*/__pycache__
+/build
+.coverage
+.env
+setenv.sh
+/cov_html
+

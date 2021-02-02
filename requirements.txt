@@ -2,3 +2,7 @@ docker
 haikunator
 emoji
 urllib3
+pytest
+pytest-html
+pytest-cov
+pytest-dotenv

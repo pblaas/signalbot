@@ -2,6 +2,17 @@ FROM pblaas/signalcli:latest
 
 LABEL MAINTAINER="patrick@kite4fun.nl"
 
+
+ENV REGISTEREDNR=""
+ENV DEBUG=""
+ENV SIGNALEXECUTORLOCAL=""
+ENV READY=""
+ENV GIPHY_APIKEY=""
+ENV GNEWS_APIKEY=""
+ENV TWITCH_CLIENTID=""
+ENV TWITCH_CLIENTSECRET=""
+
+
 USER root
 
 RUN apt-get update && \
@@ -10,14 +21,14 @@ RUN apt-get update && \
 RUN mkdir -p /tmp/signal && \
     chown nobody /tmp/signal
 
-RUN mkdir /app && \
-    chown -R nobody /app
+RUN mkdir /signalbot && \
+    chown -R nobody /signalbot
 
-COPY app.py botfunctions.py message.py requirements.txt ./app/
-WORKDIR /app
+COPY signalbot/ ./signalbot/
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
-RUN chown -R nobody /app
+RUN chown -R nobody /signalbot
 
 USER nobody
 
-ENTRYPOINT ["python3", "app.py"]
+ENTRYPOINT ["python3", "/signalbot"]
