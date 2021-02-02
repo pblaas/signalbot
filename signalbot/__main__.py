@@ -42,6 +42,10 @@ if os.environ.get('READY'):
 else:
     READY = False
 
+if BLACKLIST in os.environ:
+    blacklist = os.environ.get('BLACKLIST')
+else:
+    blacklist = []
 
 def init_program():
     """Initialize start of program."""
@@ -94,7 +98,10 @@ def parse_message(value):
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
                 if READY:
-                    run_signalcli(messageobject)
+                    if group_not_in_blacklist(messageobject, blacklist):
+                        run_signalcli(messageobject)
+                    else:
+                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist.")
                 else:
                     logging.info("NOOP due to ready mode set to false.")
 
@@ -113,7 +120,10 @@ def parse_message(value):
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
                 if READY:
-                    run_signalcli(messageobject)
+                    if group_not_in_blacklist(messageobject, blacklist):
+                        run_signalcli(messageobject)
+                    else:
+                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist.")
                 else:
                     logging.info("NOOP due to ready mode set to false.")
 
@@ -169,6 +179,13 @@ def run_signalcli(messageobject):
                     auto_remove=True,
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
+
+
+def group_not_in_blacklist(messageobject, blacklist):
+    for groupid in blacklist:
+        if groupid == messageobject.getgroupinfo():
+            return False
+    return True
 
 
 if __name__ == '__main__':
