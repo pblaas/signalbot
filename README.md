@@ -1,5 +1,6 @@
 # signal-cli
 
+![alt text](coverage.svg "Code coverage")
 
 ## Create intial config
 ```buildoutcfg
