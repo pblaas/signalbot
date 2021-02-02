@@ -88,8 +88,20 @@ def test_switch_get_function_twitch_without_option(switchcase):
     assert 'twitch subcommands' in switchcase.switch('!twitch')
 
 
-def test_switch_get_function_twitch_topgames(switchcasetwitch):
-    assert '' == switchcasetwitch.switch("tg")
+def test_switch_get_function_twitch_get_access_token(switchcasetwitch):
+    assert re.match(r'\w{30}', switchcasetwitch._getaccestoken())
+
+
+def test_switch_get_function_twitch_get_topgames(switchcasetwitch):
+    assert re.match(r'\s*Top games:', switchcasetwitch.topgames())
+
+
+def test_switch_get_function_twitch_get_topstreams(switchcasetwitch):
+    assert re.match(r'\s*Top Streams:', switchcasetwitch.topstreams())
+
+
+def test_switch_get_function_twitch_get_pcreleases(switchcasetwitch):
+    assert re.match(r'\s*New PC releases:', switchcasetwitch.pcreleases())
 
 
 def test_switch_get_function_version(switchcase):
