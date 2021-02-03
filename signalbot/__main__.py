@@ -50,17 +50,17 @@ def init_program():
     """Initialize start of program."""
     try:
 
-        home = os.environ['HOME']
+        homedir = os.environ['HOME']
         if SIGNALEXECUTORLOCAL:
             out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-o", "json", "-u", REGISTEREDNR, "receive"], stdout=subprocess.PIPE, text=True)
             output = out.stdout
         else:
-            client = docker.from_env()
-            out = client.containers.run(
+            dockerclient = docker.from_env()
+            out = dockerclient.containers.run(
                 SIGNALCLIIMAGE,
                 "-o json -u " + REGISTEREDNR + " receive",
                 auto_remove=True,
-                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                volumes={homedir + '/signal': {'bind': '/config', 'mode': 'rw'}}
             )
             output = out.decode('utf-8')
         lines = []
@@ -129,6 +129,7 @@ def parse_message(value):
 
 def run_signalcli(messageobject):
     """Run SignalCLI and return messages."""
+    global client, home
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
 
         action = SwitchCase(__version__, __author__, SIGNALEXECUTORLOCAL, messageobject.getmessage())
