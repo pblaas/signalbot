@@ -2,17 +2,6 @@ FROM pblaas/signalcli:latest
 
 LABEL MAINTAINER="patrick@kite4fun.nl"
 
-
-ENV REGISTEREDNR=""
-ENV DEBUG=""
-ENV SIGNALEXECUTORLOCAL=""
-ENV READY=""
-ENV GIPHY_APIKEY=""
-ENV GNEWS_APIKEY=""
-ENV TWITCH_CLIENTID=""
-ENV TWITCH_CLIENTSECRET=""
-
-
 USER root
 
 RUN apt-get update && \
