@@ -7,4 +7,5 @@ build
 .env
 setenv.sh
 cov_html
-
+dist
+SignalBot.egg-info
