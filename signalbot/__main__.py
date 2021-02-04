@@ -208,7 +208,7 @@ if __name__ == '__main__':
     logging.info("Signal bot " + __version__ + " started.")
     logging.info("Debug " + str(DEBUG))
     logging.info("Local Executor " + str(SIGNALEXECUTORLOCAL))
-    logging.info("READY " + str(READY))
+    logging.info("Ready " + str(READY))
     logging.info("Blacklists: " + str(blacklist))
     logging.info("Whitelits: " + str(whitelist))
     while True:
