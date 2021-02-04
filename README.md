@@ -89,7 +89,12 @@ There are two mandatory variables which need to be set in order for the bot to w
 
 To start the bot run:
 ```
-docker run -v $HOME/signal:/config --rm -it pblaas/signalbot
+docker run -v $HOME/signal:/config -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
+```
+
+To enable to bot to reply to commands like !help
+```
+docker run -v $HOME/signal:/config -e READY=True -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
 ```
 
 ### Non-local executor mode
