@@ -6,4 +6,4 @@ class Version:
 
     def version(self):
         """Return version information."""
-        return "SignalCLI bot version: " + self._version + " by " + self._author
+        return "Signalbot version: " + self._version + " by " + self._author
