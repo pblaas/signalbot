@@ -45,6 +45,11 @@ if 'BLACKLIST' in os.environ:
 else:
     blacklist = []
 
+if 'WHITELIST' in os.environ:
+    whitelist = os.environ.get('WHITELIST').split(',')
+else:
+    whitelist = []
+
 
 def init_program():
     """Initialize start of program."""
@@ -97,10 +102,10 @@ def parse_message(value):
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
                 if READY:
-                    if group_not_in_blacklist(messageobject, blacklist):
+                    if group_not_in_blacklist(messageobject, blacklist) and group_in_whitelist(messageobject, whitelist):
                         run_signalcli(messageobject)
                     else:
-                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist.")
+                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
                     logging.info("NOOP due to ready mode set to false.")
 
@@ -119,10 +124,10 @@ def parse_message(value):
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
                 if READY:
-                    if group_not_in_blacklist(messageobject, blacklist):
+                    if group_not_in_blacklist(messageobject, blacklist) and group_in_whitelist(messageobject, whitelist):
                         run_signalcli(messageobject)
                     else:
-                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist.")
+                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
                     logging.info("NOOP due to ready mode set to false.")
 
@@ -188,6 +193,16 @@ def group_not_in_blacklist(messageobject, blist):
     return True
 
 
+def group_in_whitelist(messageobject, wlist):
+    if len(wlist) > 0:
+        for groupid in wlist:
+            if groupid == messageobject.getgroupinfo():
+                return True
+        return False
+    else:
+        return True
+
+
 if __name__ == '__main__':
 
     logging.info("Signal bot " + __version__ + " started.")
@@ -195,6 +210,7 @@ if __name__ == '__main__':
     logging.info("Local Executor " + str(SIGNALEXECUTORLOCAL))
     logging.info("READY " + str(READY))
     logging.info("Blacklists: " + str(blacklist))
+    logging.info("Whitelits: " + str(whitelist))
     while True:
         init_program()
         time.sleep(2)

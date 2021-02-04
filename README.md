@@ -157,6 +157,7 @@ GIPHY_APIKEY=""
 GNEWS_APIKEY=""
 TWITCH_CLIENTID=""
 BLACKLIST=""
+WHITELIST=""
 ```
 ## Running the Pytest testsuite
 ```
