@@ -6,7 +6,8 @@ import emoji
 class Me:
     """Defining base class for inheritence."""
 
-    def me(self):
+    @staticmethod
+    def me():
         """Return random Emoij."""
         thumb = emoji.emojize(':eggplant:')
         return thumb

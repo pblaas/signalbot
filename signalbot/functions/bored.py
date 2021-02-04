@@ -7,7 +7,8 @@ import json
 class Bored:
     """Defining base class for inheritence."""
 
-    def bored(self):
+    @staticmethod
+    def bored():
         """Get random jokes from chucknorris API."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://www.boredapi.com/api/activity?type=recreational')

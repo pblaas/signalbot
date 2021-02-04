@@ -4,6 +4,7 @@
 class Test:
     """Defining base class for inheritence."""
 
-    def test(self):
+    @staticmethod
+    def test():
         """Simple test function."""
         return "@#*&ES&@#YF.. nooo you got me!"

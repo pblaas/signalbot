@@ -103,6 +103,7 @@ def test_switch_get_function_twitch_get_topstreams(switchcasetwitch):
 def test_switch_get_function_twitch_get_pcreleases(switchcasetwitch):
     assert re.match(r'\s*New PC releases:', switchcasetwitch.pcreleases())
 
+
 def test_switch_get_function_version(switchcase):
     assert 'SignalCLI bot version: 7.7.7 by Patrick' == switchcase.switch('!version')
 

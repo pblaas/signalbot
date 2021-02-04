@@ -7,7 +7,8 @@ import json
 class Chuck:
     """Defining base class for inheritence."""
 
-    def chuck(self):
+    @staticmethod
+    def chuck():
         """Get random jokes from chucknorris API."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://api.chucknorris.io/jokes/random')

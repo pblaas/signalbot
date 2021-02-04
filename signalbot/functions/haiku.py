@@ -6,26 +6,27 @@ from random import randint
 class Haiku:
     """Defining base class for inheritence."""
 
-    def haiku(self):
+    @staticmethod
+    def haiku():
         """Return a random generator Haiku."""
-        wordList1 = ["Enchanting", "Amazing", "Colourful", "Delightful", "Delicate"]
-        wordList2 = ["visions", "distance", "conscience", "process", "chaos"]
-        wordList3 = ["superstitious", "contrasting", "graceful", "inviting", "contradicting", "overwhelming"]
-        wordList4 = ["true", "dark", "cold", "warm", "great"]
-        wordList5 = ["scenery", "season", "colours", "lights", "Spring", "Winter", "Summer", "Autumn"]
-        wordList6 = ["undeniable", "beautiful", "irreplaceable", "unbelievable", "irrevocable"]
-        wordList7 = ["inspiration", "imagination", "wisdom", "thoughts"]
+        wordlist1 = ["Enchanting", "Amazing", "Colourful", "Delightful", "Delicate"]
+        wordlist2 = ["visions", "distance", "conscience", "process", "chaos"]
+        wordlist3 = ["superstitious", "contrasting", "graceful", "inviting", "contradicting", "overwhelming"]
+        wordlist4 = ["true", "dark", "cold", "warm", "great"]
+        wordlist5 = ["scenery", "season", "colours", "lights", "Spring", "Winter", "Summer", "Autumn"]
+        wordlist6 = ["undeniable", "beautiful", "irreplaceable", "unbelievable", "irrevocable"]
+        wordlist7 = ["inspiration", "imagination", "wisdom", "thoughts"]
 
-        wordIndex1 = randint(0, len(wordList1) - 1)
-        wordIndex2 = randint(0, len(wordList2) - 1)
-        wordIndex3 = randint(0, len(wordList3) - 1)
-        wordIndex4 = randint(0, len(wordList4) - 1)
-        wordIndex5 = randint(0, len(wordList5) - 1)
-        wordIndex6 = randint(0, len(wordList6) - 1)
-        wordIndex7 = randint(0, len(wordList7) - 1)
+        wordindex1 = randint(0, len(wordlist1) - 1)
+        wordindex2 = randint(0, len(wordlist2) - 1)
+        wordindex3 = randint(0, len(wordlist3) - 1)
+        wordindex4 = randint(0, len(wordlist4) - 1)
+        wordindex5 = randint(0, len(wordlist5) - 1)
+        wordindex6 = randint(0, len(wordlist6) - 1)
+        wordindex7 = randint(0, len(wordlist7) - 1)
 
-        haiku = wordList1[wordIndex1] + " " + wordList2[wordIndex2] + ",\n"
-        haiku = haiku + wordList3[wordIndex3] + " " + wordList4[wordIndex4] + " " + wordList5[wordIndex5] + ",\n"
-        haiku = haiku + wordList6[wordIndex6] + " " + wordList7[wordIndex7] + "."
+        haiku = wordlist1[wordindex1] + " " + wordlist2[wordindex2] + ",\n"
+        haiku = haiku + wordlist3[wordindex3] + " " + wordlist4[wordindex4] + " " + wordlist5[wordindex5] + ",\n"
+        haiku = haiku + wordlist6[wordindex6] + " " + wordlist7[wordindex7] + "."
 
         return haiku

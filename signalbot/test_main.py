@@ -11,5 +11,5 @@ def test_main_parse_message_sentmessage():
 
 
 def test_main_parse_message_datamessage():
-     json = '{"envelope":{"source":"+31645606468","sourceDevice":1,"timestamp":1612267985986,"dataMessage":{"timestamp":1612267985986,"message":"!hn","expiresInSeconds":60,"viewOnce":false,"mentions":[],"attachments":[],"groupInfo":{"groupId":"OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI=","type":"DELIVER"}}}}'
-     assert signalbot.__main__.parse_message(json) is None
+    json = '{"envelope":{"source":"+31645606468","sourceDevice":1,"timestamp":1612267985986,"dataMessage":{"timestamp":1612267985986,"message":"!hn","expiresInSeconds":60,"viewOnce":false,"mentions":[],"attachments":[],"groupInfo":{"groupId":"OcX1j1sAF3e8yGDuFxd/sC+XKJL8TbBTOhCREc4CNXI=","type":"DELIVER"}}}}'
+    assert signalbot.__main__.parse_message(json) is None

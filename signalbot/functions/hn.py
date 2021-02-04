@@ -9,7 +9,8 @@ from random import randint
 class Hn:
     """Defining base class for inheritence."""
 
-    def hn(self):
+    @staticmethod
+    def hn():
         """Return 1 of 10 latest hacker news items."""
         thumb = emoji.emojize(':newspaper:')
         http = urllib3.PoolManager()

@@ -4,7 +4,8 @@
 class Help:
     """Defining base class for inheritence."""
 
-    def help(self):
+    @staticmethod
+    def help():
         """Return all available commands."""
         return """
         cmnds

@@ -6,7 +6,8 @@ import emoji
 class TestEmoji:
     """Defining base class for inheritence."""
 
-    def testemoji(self):
+    @staticmethod
+    def testemoji():
         """Return random Emoij."""
         tv2 = emoji.emojize(':tv2:')
         movie_camera = emoji.emojize(':movie_camera:')
@@ -17,4 +18,3 @@ class TestEmoji:
         tomato = emoji.emojize(':tomato:')
 
         return tv2 + " " + movie_camera + " " + apple2 + " " + lemon + " " + pineapple + " " + pear + " " + tomato
-
