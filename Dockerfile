@@ -5,7 +5,8 @@ LABEL MAINTAINER="patrick@kite4fun.nl"
 USER root
 
 RUN apt-get update && \
-    apt-get -y install python3 python3-pip vim
+    apt-get -y install python3 python3-pip && \
+    apt-get clean
 
 RUN mkdir -p /tmp/signal && \
     chown nobody /tmp/signal
