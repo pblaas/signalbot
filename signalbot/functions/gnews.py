@@ -6,6 +6,7 @@ import os
 import random
 from pprint import pprint as pp
 
+
 class Gnews:
     """Defining base class for inheritence."""
 
