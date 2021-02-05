@@ -105,7 +105,7 @@ def test_switch_get_function_twitch_get_pcreleases(switchcasetwitch):
 
 
 def test_switch_get_function_version(switchcase):
-    assert 'SignalCLI bot version: 7.7.7 by Patrick' == switchcase.switch('!version')
+    assert 'Signalbot version: 7.7.7 by Patrick' == switchcase.switch('!version')
 
 
 def test_switch_get_function_winamp(switchcase):
