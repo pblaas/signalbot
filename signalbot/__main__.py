@@ -8,48 +8,76 @@ import docker
 import subprocess
 import logging
 import sys
+from distutils.util import strtobool
 from message import Message
 from botfunctions import SwitchCase
+from metadata import version, author
 
-
-__author__ = "Patrick Blaas <patrick@kite4fun.nl>"
-__version__ = "0.0.11"
-REGISTEREDNR = "+31630030905"
+__author__ = author
+__version__ = version
 SIGNALCLIIMAGE = "pblaas/signalcli:latest"
-DEBUG = True
-SIGNALEXECUTORLOCAL = True
-DRYRUN = False
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+if 'REGISTEREDNR' not in os.environ:
+    logging.error("Mandatory variable not set: REGISTEREDNR")
+    exit(1)
+else:
+    REGISTEREDNR = os.environ.get('REGISTEREDNR')
+
+if 'DEBUG' in os.environ:
+    DEBUG = bool(strtobool(os.environ.get('DEBUG')))
+else:
+    DEBUG = False
+
+if 'SIGNALEXECUTORLOCAL' in os.environ:
+    SIGNALEXECUTORLOCAL = bool(strtobool(os.environ.get('SIGNALEXECUTORLOCAL')))
+else:
+    SIGNALEXECUTORLOCAL = True
+
+if 'READY' in os.environ:
+    READY = bool(strtobool(os.environ.get('READY')))
+else:
+    READY = False
+
+if 'BLACKLIST' in os.environ:
+    blacklist = os.environ.get('BLACKLIST').split(',')
+else:
+    blacklist = []
+
+if 'WHITELIST' in os.environ:
+    whitelist = os.environ.get('WHITELIST').split(',')
+else:
+    whitelist = []
 
 
 def init_program():
     """Initialize start of program."""
     try:
-        home = os.environ['HOME']
-        if SIGNALEXECUTORLOCAL is False:
-            client = docker.from_env()
+
+        homedir = os.environ['HOME']
         if SIGNALEXECUTORLOCAL:
             out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-o", "json", "-u", REGISTEREDNR, "receive"], stdout=subprocess.PIPE, text=True)
             output = out.stdout
         else:
-            out = client.containers.run(
+            dockerclient = docker.from_env()
+            out = dockerclient.containers.run(
                 SIGNALCLIIMAGE,
                 "-o json -u " + REGISTEREDNR + " receive",
                 auto_remove=True,
-                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                volumes={homedir + '/signal': {'bind': '/config', 'mode': 'rw'}}
             )
-            output = out.decode('utf8')
+            output = out.decode('utf-8')
         lines = []
         for line in output.split("\n"):
             lines.append(line)
 
         for index, value in enumerate(lines):
             if value:
-                parse_message(value)
+                parse_message(value.replace(u"\u2018", "'").replace(u"\u2019", "'"))
 
     except docker.errors.NotFound:
-        logging.error("Unable to retreive container. Please verify container.")
+        logging.error("Unable to retrieve container. Please verify container.")
     except docker.errors.APIError as e_error:
         logging.error("Docker API error due to: " + e_error)
 
@@ -73,10 +101,13 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                if DRYRUN is False:
-                    run_signalcli(messageobject)
+                if READY:
+                    if group_not_in_blacklist(messageobject, blacklist) and group_in_whitelist(messageobject, whitelist):
+                        run_signalcli(messageobject)
+                    else:
+                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
-                    logging.info("Dry run active.")
+                    logging.info("NOOP due to ready mode set to false.")
 
     if "dataMessage" in res['envelope']:
         if "message" in res['envelope']['dataMessage']:
@@ -92,24 +123,28 @@ def parse_message(value):
                     logging.info(messageobject.getsource())
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
-                if DRYRUN is False:
-                    run_signalcli(messageobject)
+                if READY:
+                    if group_not_in_blacklist(messageobject, blacklist) and group_in_whitelist(messageobject, whitelist):
+                        run_signalcli(messageobject)
+                    else:
+                        logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
-                    logging.info("Dry run active.")
+                    logging.info("NOOP due to ready mode set to false.")
 
 
 def run_signalcli(messageobject):
     """Run SignalCLI and return messages."""
+    global client, home
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
 
         action = SwitchCase(__version__, __author__, SIGNALEXECUTORLOCAL, messageobject.getmessage())
         actionmessage = action.switch(messageobject.getmessage()).replace('"', '')
 
-        if SIGNALEXECUTORLOCAL is False:
+        if not SIGNALEXECUTORLOCAL:
             client = docker.from_env()
             home = os.environ['HOME']
 
-        if messageobject.getmessage() == "!gif":
+        if messageobject.getmessage() == "!gif" and actionmessage == "Gif":
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
             else:
@@ -119,7 +154,7 @@ def run_signalcli(messageobject):
                     auto_remove=True,
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
-        elif messageobject.getmessage() == "!random":
+        elif messageobject.getmessage() == "!rand":
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "updateGroup", "-g", messageobject.getgroupinfo(), "-n", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
             else:
@@ -151,12 +186,31 @@ def run_signalcli(messageobject):
                 )
 
 
+def group_not_in_blacklist(messageobject, blist):
+    for groupid in blist:
+        if groupid == messageobject.getgroupinfo():
+            return False
+    return True
+
+
+def group_in_whitelist(messageobject, wlist):
+    if len(wlist) > 0:
+        for groupid in wlist:
+            if groupid == messageobject.getgroupinfo():
+                return True
+        return False
+    else:
+        return True
+
+
 if __name__ == '__main__':
 
     logging.info("Signal bot " + __version__ + " started.")
-    logging.info("Debug is " + str(DEBUG))
-    logging.info("Local Signal executor " + str(SIGNALEXECUTORLOCAL))
-    logging.info("Dry run is " + str(DRYRUN))
+    logging.info("Debug " + str(DEBUG))
+    logging.info("Local Executor " + str(SIGNALEXECUTORLOCAL))
+    logging.info("Ready " + str(READY))
+    logging.info("Blacklists: " + str(blacklist))
+    logging.info("Whitelits: " + str(whitelist))
     while True:
         init_program()
         time.sleep(2)

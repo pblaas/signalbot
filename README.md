@@ -1,10 +1,10 @@
-# signal-cli
-
+# SignalBot
+![alt text](coverage.svg "Code coverage")
 
 ## Create intial config
 ```
 mkdir $HOME/signal
-docker run -v $HOME/signal:/config --rm -it pblaas/signal-cli:latest link
+docker run -v $HOME/signal:/config --rm -it pblaas/signalcli:latest link
 ```
 
 
@@ -13,13 +13,13 @@ Paste entire tsdevice:/? string in https://www.nayuki.io/page/qr-code-generator-
 ## Start messaging
 After device is connected you can start sending messages:
 ```
-docker run -v $HOME/signal:/config --rm -it pblaas/signal-cli:latest -u YOURREGISTEREDNR send RECEIVER -m "your message"
+docker run -v $HOME/signal:/config --rm -it pblaas/signalcli:latest -u YOURREGISTEREDNR send RECEIVER -m "your message"
 ```
 
 
 ## show CLI help
 ```
-docker run -v $HOME/signal:/config --rm -it pblaas/signal-cli:latest -h
+docker run -v $HOME/signal:/config --rm -it pblaas/signalcli:latest -h
 ```
 
 ## having some fun
@@ -42,7 +42,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !names - random names based on python haikunator implementation [DONE]
 * !launch - return lanched message and send source a image of impact.
 * !trivia - return trivia questions [DONE] [API]
-* !twitch - Return twitch and game related info [DONE] [API] [APIKEY]
+* !twitch - Return twitch and game related info [DONE] [API] [OAUTH2]
 * !bored - Returns random activities [DONE]  [API]
 * !dog - Return short message with Emoji [DONE] 
 * !winamp - Returns winamp slogan with Emoji [DONE]
@@ -64,6 +64,8 @@ The bot can run in two modes.
 * Docker engine
 * $HOME/signal directory which contains Signal user profile.
 * Giphy.com API key
+* Gnews API key
+* Twitch clientid and clientsecret
 
 
 ### Docker engine
@@ -78,25 +80,41 @@ The containers expect signal user profile configuration in /config. So when cont
 
 Local executor means the bot will run inside of a docker container and will also use the signal-cli command from inside of the container. 
 
-To set local executor mode change boolean on the top of the app.py to:
-`SIGNALEXECUTORLOCAL = True`
+Local executor mode is the default and expects the bot to run inside a container.
+There are two mandatory variables which need to be set in order for the bot to work.
+
+*   REGISTEREDNR - contains the phone number you registered with the Signal  messenger service.
+*   READY - Default set to False. In order for the Bot to respond it needs to be set to True.
+
 
 To start the bot run:
 ```
-docker run -v $HOME/signal:/config --rm -it pblaas/signalbot
+docker run -v $HOME/signal:/config -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
+```
+
+To enable to bot to reply to commands like !help
+```
+docker run -v $HOME/signal:/config -e READY=True -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
 ```
 
 ### Non-local executor mode
 
 The non local executor mode means the bot can be run in local python3 environment with all the requirements from requirements.txt installed. It will however use a docker container to fire response commands. 
 
-To set non-local executor mode change boolean on the top of the app.py to:
-`SIGNALEXECUTORLOCAL = False`
+To set non-local executor mode change the environment variable:
+`export SIGNALEXECUTORLOCAL=False`
+
+Just like the local executor mode you also need to set some mandatory flags in order for the bot
+to be useful.
+
+*   REGISTEREDNR - contains the phone number you registered with the Signal  messenger service.
+*   READY - Default set to False. In order for the Bot to respond it needs to be set to True.
+
 
 To start the bot run:
 ```
 pip3 install -r requirements
-python3 app.py
+python signalbot/
 ```
 
 ## Linking or registering
@@ -125,3 +143,32 @@ You will then receive a SMS message with validation code.
 signal-cli -u YOURPHONENUMBER verify CODE
 ```
 
+# Development
+
+Additional bot functions should be added to the signalbot/functions directory. The modules should contain a class
+and one or multiple methods. The class then should also be added to the __init__.py file in the functions directory.
+
+Next the new class should be added to the SwitchCase class in botfunctions.py so its content can be inherited. 
+Reviewing some existing functions should give a good idea on how the bot can be extended.
+
+
+Testcases are written in Pytest and utilize a .env file with the required variables:
+```
+READY=False
+DEBUG=True
+SIGNALEXECUTORLOCAL=False
+REGISTEREDNR="+316"
+GIPHY_APIKEY=""
+GNEWS_APIKEY=""
+TWITCH_CLIENTID=""
+BLACKLIST=""
+WHITELIST=""
+```
+## Running the Pytest testsuite
+```
+pytest signalbot/
+```
+## Run Pytest code coverage check
+```
+pytest --cov-report html:cov_html --cov=signalbot signalbot/
+```
