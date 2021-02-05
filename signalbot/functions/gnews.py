@@ -4,7 +4,7 @@ import urllib3
 import json
 import os
 import random
-
+from pprint import pprint as pp
 
 class Gnews:
     """Defining base class for inheritence."""
@@ -42,9 +42,11 @@ class SwitchCaseGnews:
             http = urllib3.PoolManager()
             req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
             all_news = json.loads(req_return.data.decode('utf-8'))
+            pp(all_news)
             total_articles = len(all_news['articles'])
+            pp(total_articles)
             if total_articles > 0:
-                random_article_number = random.randint(0, total_articles)
+                random_article_number = random.randint(0, total_articles-1)
                 return f"""Gnews: {all_news['articles'][random_article_number]['title']} -> {all_news['articles'][random_article_number]['article_url']}"""
             else:
                 return "Gnews: No articles found."
