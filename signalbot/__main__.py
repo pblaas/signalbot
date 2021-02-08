@@ -154,6 +154,16 @@ def run_signalcli(messageobject):
                     auto_remove=True,
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
+        elif messageobject.getmessage() == "!xkcd" and actionmessage == "xkcd":
+            if SIGNALEXECUTORLOCAL:
+                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", "", "-a", "/tmp/signal/image.png"], stdout=subprocess.PIPE, text=True, shell=False)
+            else:
+                client.containers.run(
+                    SIGNALCLIIMAGE,
+                    "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /config/image.png",
+                    auto_remove=True,
+                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                )
         elif messageobject.getmessage() == "!rand":
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "updateGroup", "-g", messageobject.getgroupinfo(), "-n", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
