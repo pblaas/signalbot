@@ -77,7 +77,7 @@ class SwitchCaseTmdb:
             new_line = "\n"
             item_return_string = new_line.join(item_array)
             pp(item_return_string)
-            return f"""The Movie DB Movie Release Dates:\n{item_return_string}"""
+            return f"""The Movie DB Movie Release Dates:\n\n{item_return_string}"""
         else:
             return "tmdb: no items found."
 
@@ -144,7 +144,7 @@ class SwitchCaseTmdb:
             new_line = "\n"
             item_return_string = new_line.join(item_array)
             pp(item_return_string)
-            return f"""The Movie DB tvshow Release Dates:\n{item_return_string}"""
+            return f"""The Movie DB tvshow Release Dates:\n\n{item_return_string}"""
         else:
             return "tmdb: no items found."
 
@@ -159,14 +159,14 @@ class SwitchCaseTmdb:
         if all_item_results > 0:
             item_array = []
             for x in range(0, all_item_results):
-                if x == 3:
+                if x == 5:
                     break
                 item_array.append(f"{all_items['results'][x]['first_air_date']} -> {all_items['results'][x]['name']}")
 
             new_line = "\n"
             item_return_string = new_line.join(item_array)
             pp(item_return_string)
-            return f"""The Movie DB New TVshow Release Dates:\n{item_return_string}"""
+            return f"""The Movie DB New TVshow Release Dates:\n\n{item_return_string}"""
         else:
             return "tmdb: no items found."
 
