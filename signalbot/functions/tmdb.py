@@ -55,28 +55,32 @@ class SwitchCaseTmdb:
             http = urllib3.PoolManager()
             url = "https://api.themoviedb.org/3/" + endpoint + "?api_key=" + apikey + "&language=en-US&page=1&include_adult=false" + additional_flags
             req_return = http.request('GET', url)
-            return req_return
+            return [True, req_return]
         else:
-            return "No tmdb API KEY found."
+            return [False, "No tmdb API KEY found."]
 
     def movierelease(self):
         """Get movie release info from tmdb API."""
         endpoint = "search/movie"
         searchstring = str(self._message)
-        all_items = json.loads(self._queryapi(endpoint, searchstring).data.decode('utf-8'))
-        all_item_results = len(all_items['results'])
-        if all_item_results > 0:
-            item_array = []
-            for x in range(0, all_item_results):
-                if x == 3:
-                    break
-                item_array.append(f"{all_items['results'][x]['release_date']} -> {all_items['results'][x]['original_title']}")
+        fetchdata = self._queryapi(endpoint, searchstring)
+        if fetchdata[0]:
+            all_items = json.loads(fetchdata[1].data.decode('utf-8'))
+            all_item_results = len(all_items['results'])
+            if all_item_results > 0:
+                item_array = []
+                for x in range(0, all_item_results):
+                    if x == 3:
+                        break
+                    item_array.append(f"{all_items['results'][x]['release_date']} -> {all_items['results'][x]['original_title']}")
 
-            new_line = "\n"
-            item_return_string = new_line.join(item_array)
-            return f"""The Movie DB Movie Release Dates:\n\n{item_return_string}"""
+                new_line = "\n"
+                item_return_string = new_line.join(item_array)
+                return f"""The Movie DB Movie Release Dates:\n\n{item_return_string}"""
+            else:
+                return "tmdb: no items found."
         else:
-            return "tmdb: no items found."
+            return fetchdata[1]
 
     mr = movierelease
 
@@ -84,64 +88,76 @@ class SwitchCaseTmdb:
         """Get movie info from tmdb API."""
         endpoint = "search/movie"
         searchstring = str(self._message)
-        all_items = json.loads(self._queryapi(endpoint, searchstring).data.decode('utf-8'))
-        all_item_results = len(all_items['results'])
-        if all_item_results > 0:
-            return textwrap.dedent(f"""\
-            The Movie DB Movie Info:\n
-            {all_items['results'][0]['original_title']}
-            Overview: {all_items['results'][0]['overview']}
-            Popularity: {all_items['results'][0]['popularity']}
-            Vote avg: {all_items['results'][0]['vote_average']}
-            Vote count: {all_items['results'][0]['vote_count']}""")
+        fetchdata = self._queryapi(endpoint, searchstring)
+        if fetchdata[0]:
+            all_items = json.loads(fetchdata[1].data.decode('utf-8'))
+            all_item_results = len(all_items['results'])
+            if all_item_results > 0:
+                return textwrap.dedent(f"""\
+                The Movie DB Movie Info:\n
+                {all_items['results'][0]['original_title']}
+                Overview: {all_items['results'][0]['overview']}
+                Popularity: {all_items['results'][0]['popularity']}
+                Vote avg: {all_items['results'][0]['vote_average']}
+                Vote count: {all_items['results'][0]['vote_count']}""")
+            else:
+                return "tmdb: no items found."
         else:
-            return "tmdb: no items found."
+            return fetchdata[1]
 
     def tvshow(self):
         """Get tvshow info from tmdb API."""
         endpoint = "search/tv"
         searchstring = str(self._message)
-        all_items = json.loads(self._queryapi(endpoint, searchstring).data.decode('utf-8'))
-        all_item_results = len(all_items['results'])
-        if all_item_results > 0:
-            if all_items['results'][0]['first_air_date']:
-                first_date_date = all_items['results'][0]['first_air_date']
+        fetchdata = self._queryapi(endpoint, searchstring)
+        if fetchdata[0]:
+            all_items = json.loads(fetchdata[1].data.decode('utf-8'))
+            all_item_results = len(all_items['results'])
+            if all_item_results > 0:
+                if all_items['results'][0]['first_air_date']:
+                    first_date_date = all_items['results'][0]['first_air_date']
+                else:
+                    first_date_date = "Unknown."
+                return textwrap.dedent(f"""\
+                The Movie DB TVshow Info:\n
+                {all_items['results'][0]['original_name']}
+                Overview: {all_items['results'][0]['overview']}
+                Popularity: {all_items['results'][0]['popularity']}
+                Vote avg: {all_items['results'][0]['vote_average']}
+                Vote count: {all_items['results'][0]['vote_count']}
+                First aired: {first_date_date}""")
             else:
-                first_date_date = "Unknown."
-            return textwrap.dedent(f"""\
-            The Movie DB TVshow Info:\n
-            {all_items['results'][0]['original_name']}
-            Overview: {all_items['results'][0]['overview']}
-            Popularity: {all_items['results'][0]['popularity']}
-            Vote avg: {all_items['results'][0]['vote_average']}
-            Vote count: {all_items['results'][0]['vote_count']}
-            First aired: {first_date_date}""")
+                return "tmdb: no items found."
         else:
-            return "tmdb: no items found."
+            return fetchdata[1]
 
     def tvshowrelease(self):
         """Get tvshow release date info from tmdb API."""
         endpoint = "search/tv"
         searchstring = str(self._message)
-        all_items = json.loads(self._queryapi(endpoint, searchstring).data.decode('utf-8'))
-        all_item_results = len(all_items['results'])
-        if all_item_results > 0:
-            item_array = []
-            for x in range(0, all_item_results):
-                if x == 3:
-                    break
-                if all_items['results'][0]['first_air_date']:
-                    first_date_date = all_items['results'][0]['first_air_date']
-                else:
-                    first_date_date = "Unknown."
+        fetchdata = self._queryapi(endpoint, searchstring)
+        if fetchdata[0]:
+            all_items = json.loads(fetchdata[1].data.decode('utf-8'))
+            all_item_results = len(all_items['results'])
+            if all_item_results > 0:
+                item_array = []
+                for x in range(0, all_item_results):
+                    if x == 3:
+                        break
+                    if all_items['results'][0]['first_air_date']:
+                        first_date_date = all_items['results'][0]['first_air_date']
+                    else:
+                        first_date_date = "Unknown."
 
-                item_array.append(f"{first_date_date} -> {all_items['results'][x]['name']}")
+                    item_array.append(f"{first_date_date} -> {all_items['results'][x]['name']}")
 
-            new_line = "\n"
-            item_return_string = new_line.join(item_array)
-            return f"""The Movie DB tvshow Release Dates:\n\n{item_return_string}"""
+                new_line = "\n"
+                item_return_string = new_line.join(item_array)
+                return f"""The Movie DB tvshow Release Dates:\n\n{item_return_string}"""
+            else:
+                return "tmdb: no items found."
         else:
-            return "tmdb: no items found."
+            return fetchdata[1]
 
     tvr = tvshowrelease
 
@@ -149,19 +165,23 @@ class SwitchCaseTmdb:
         """Get new tvshow release date info from tmdb API."""
         endpoint = "discover/tv"
         searchstring = ""
-        all_items = json.loads(self._queryapi(endpoint, searchstring).data.decode('utf-8'))
-        all_item_results = len(all_items['results'])
-        if all_item_results > 0:
-            item_array = []
-            for x in range(0, all_item_results):
-                if x == 5:
-                    break
-                item_array.append(f"{all_items['results'][x]['first_air_date']} -> {all_items['results'][x]['name']}")
+        fetchdata = self._queryapi(endpoint, searchstring)
+        if fetchdata[0]:
+            all_items = json.loads(fetchdata[1].data.decode('utf-8'))
+            all_item_results = len(all_items['results'])
+            if all_item_results > 0:
+                item_array = []
+                for x in range(0, all_item_results):
+                    if x == 5:
+                        break
+                    item_array.append(f"{all_items['results'][x]['first_air_date']} -> {all_items['results'][x]['name']}")
 
-            new_line = "\n"
-            item_return_string = new_line.join(item_array)
-            return f"""The Movie DB New TVshow Release Dates:\n\n{item_return_string}"""
+                new_line = "\n"
+                item_return_string = new_line.join(item_array)
+                return f"""The Movie DB New TVshow Release Dates:\n\n{item_return_string}"""
+            else:
+                return "tmdb: no items found."
         else:
-            return "tmdb: no items found."
+            return fetchdata[1]
 
     ntv = newtvshow
