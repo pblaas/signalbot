@@ -4,6 +4,7 @@ import urllib3
 import json
 import os
 import emoji
+import textwrap
 from datetime import datetime, date
 
 
@@ -12,14 +13,17 @@ class Twitch:
 
     def twitch(self):
         """Return game related content."""
-        twitchcase = SwitchCaseTwitch()
-        if len(self._messageobject.strip().split(" ")) > 1:
-            message = self._messageobject.split()[1]
-        else:
-            message = "default"
+        if "TWITCH_CLIENTID" in os.environ and "TWITCH_CLIENTSECRET" in os.environ:
+            twitchcase = SwitchCaseTwitch()
+            if len(self._messageobject.strip().split(" ")) > 1:
+                message = self._messageobject.split()[1]
+            else:
+                message = "default"
 
-        twitchfunctionreturn = twitchcase.switch(message).replace('"', '')
-        return twitchfunctionreturn
+            twitchfunctionreturn = twitchcase.switch(message).replace('"', '')
+            return twitchfunctionreturn
+        else:
+            return "No Twitch clientid and Twitch clientsecret found."
 
 
 class SwitchCaseTwitch:
@@ -142,10 +146,10 @@ class SwitchCaseTwitch:
         )
 
         helixdata = json.loads(helix_url.data.decode('utf-8'))
-        return f""" New PC releases:
-        {helixdata[0]['name']} | Release: {date.fromtimestamp(helixdata[0]['first_release_date'])}
-        {helixdata[1]['name']} | Release: {date.fromtimestamp(helixdata[1]['first_release_date'])}
-        {helixdata[2]['name']} | Release: {date.fromtimestamp(helixdata[2]['first_release_date'])}
-        """
+        return textwrap.dedent(f"""\
+        New PC releases:\n
+        {date.fromtimestamp(helixdata[0]['first_release_date'])} -> {helixdata[0]['name']}
+        {date.fromtimestamp(helixdata[1]['first_release_date'])} -> {helixdata[1]['name']}
+        {date.fromtimestamp(helixdata[2]['first_release_date'])} -> {helixdata[2]['name']}""")
     # Aliases for pcreleases
     pcr = pcreleases
