@@ -31,11 +31,25 @@ def test_switch_get_function_flip(switchcase):
 
 
 def test_switch_get_function_gif(switchcase):
-    assert switchcase.switch('!gif') in ['Gif', 'No Giphy API key found.']
+    assert switchcase.switch('!gif') == 'Gif'
+
+
+def test_switch_get_function_gif_no_apikey(monkeypatch):
+    """Unset the GIPHY_APIKEY env var to assert the behavior."""
+    t = SwitchCase("7.7.7", "author", True, "!gif")
+    monkeypatch.delenv("GIPHY_APIKEY", raising=False)
+    assert t.switch("!gif") == "No Giphy API key found."
 
 
 def test_switch_get_function_gnews(switchcase):
     assert re.match(r'Gnews:\s\w+\s\w+', switchcase.switch('!gnews'))
+
+
+def test_switch_get_function_gnews_no_apikey(monkeypatch):
+    """Unset the GNEWS_APIKEY env var to assert the behavior."""
+    t = SwitchCase("7.7.7", "author", True, "!gnews")
+    monkeypatch.delenv("GNEWS_APIKEY", raising=False)
+    assert t.switch("!gnews") == "No Gnews API key found."
 
 
 def test_switch_get_function_haiku(switchcase):
