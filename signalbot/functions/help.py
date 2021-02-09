@@ -23,4 +23,6 @@ class Help:
         !bored
         !trivia
         !gnews
+        !xkcd
+        !tmdb
         """

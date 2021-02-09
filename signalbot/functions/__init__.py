@@ -17,5 +17,7 @@ from .twitch import Twitch
 from .hn import Hn
 from .dog import Dog
 from .winamp import Winamp
+from .xkcd import Xkcd
+from .tmdb import Tmdb
 
-__all__ = ('Help', 'Test', 'TestEmoji', 'Version', 'Gif', 'Chuck', 'Flip', 'Rand', 'Haiku', 'Me', 'Bored', 'Trivia', 'Gnews', 'Twitch', 'Hn', 'Dog', 'Winamp')
+__all__ = ('Help', 'Test', 'TestEmoji', 'Version', 'Gif', 'Chuck', 'Flip', 'Rand', 'Haiku', 'Me', 'Bored', 'Trivia', 'Gnews', 'Twitch', 'Hn', 'Dog', 'Winamp', 'Xkcd', 'Tmdb')
