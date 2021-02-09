@@ -40,7 +40,6 @@ class SwitchCaseTmdb:
         [movierelease | mr] {string}- release dates movies
         [tvshowrelease | tvr] {string}- release dates shows
         [newtvshow | ntv] -  release dates new shows
-        [actor] {string} - actor info
         [movie] {string}- movie info
         [tvshow] {string}- tvshow info""")
         return getattr(self, str(self._category), lambda: default)()
@@ -171,7 +170,3 @@ class SwitchCaseTmdb:
             return "tmdb: no items found."
 
     ntv = newtvshow
-
-    def actor(self):
-        """Get actor info from tmdb API."""
-        return "Actor info"
