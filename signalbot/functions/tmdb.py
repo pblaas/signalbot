@@ -59,6 +59,7 @@ class SwitchCaseTmdb:
         else:
             return [False, "No tmdb API KEY found."]
 
+
     def movierelease(self):
         """Get movie release info from tmdb API."""
         endpoint = "search/movie"
