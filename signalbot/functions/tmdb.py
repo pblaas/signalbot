@@ -26,7 +26,7 @@ class Tmdb:
 
 
 class SwitchCaseTmdb:
-    """SwitchCaseTmdb class to switch gnews bot subfunctions."""
+    """SwitchCaseTmdb class to switch tmdb bot subfunctions."""
 
     def __init__(self, category, message):
         m = "%20"
