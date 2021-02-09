@@ -40,8 +40,8 @@ class SwitchCaseTmdb:
         [movierelease | mr] {string}- release dates movies
         [tvshowrelease | tvr] {string}- release dates shows
         [newtvshow | ntv] -  release dates new shows
-        [movie] {string}- movie info
-        [tvshow] {string}- tvshow info""")
+        [movie] {string} - movie info
+        [tvshow] {string} - tvshow info""")
         return getattr(self, str(self._category), lambda: default)()
 
     @staticmethod
