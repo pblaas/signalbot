@@ -24,4 +24,5 @@ class Help:
         !trivia
         !gnews
         !xkcd
+        !tmdb
         """
