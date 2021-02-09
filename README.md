@@ -47,6 +47,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !dog - Return short message with Emoji [DONE] 
 * !winamp - Returns winamp slogan with Emoji [DONE]
 * !hn - Returns random hacker news [DONE] [API]
+* !tmdb - Return movie and tv series information from The Movie DB. [DONE] [API] [APIKEY]
 
 https://www.webfx.com/tools/emoji-cheat-sheet/
 
@@ -160,6 +161,7 @@ SIGNALEXECUTORLOCAL=False
 REGISTEREDNR="+316"
 GIPHY_APIKEY=""
 GNEWS_APIKEY=""
+TMDB_APIKEY=""
 TWITCH_CLIENTID=""
 BLACKLIST=""
 WHITELIST=""
