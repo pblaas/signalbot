@@ -5,7 +5,6 @@ import json
 import os
 import textwrap
 from datetime import datetime
-from pprint import pprint as pp
 
 
 class Tmdb:
@@ -75,7 +74,6 @@ class SwitchCaseTmdb:
 
             new_line = "\n"
             item_return_string = new_line.join(item_array)
-            pp(item_return_string)
             return f"""The Movie DB Movie Release Dates:\n\n{item_return_string}"""
         else:
             return "tmdb: no items found."
@@ -127,7 +125,6 @@ class SwitchCaseTmdb:
         searchstring = str(self._message)
         all_items = json.loads(self._queryapi(endpoint, searchstring).data.decode('utf-8'))
         all_item_results = len(all_items['results'])
-        pp(all_items)
         if all_item_results > 0:
             item_array = []
             for x in range(0, all_item_results):
@@ -142,7 +139,6 @@ class SwitchCaseTmdb:
 
             new_line = "\n"
             item_return_string = new_line.join(item_array)
-            pp(item_return_string)
             return f"""The Movie DB tvshow Release Dates:\n\n{item_return_string}"""
         else:
             return "tmdb: no items found."
@@ -164,7 +160,6 @@ class SwitchCaseTmdb:
 
             new_line = "\n"
             item_return_string = new_line.join(item_array)
-            pp(item_return_string)
             return f"""The Movie DB New TVshow Release Dates:\n\n{item_return_string}"""
         else:
             return "tmdb: no items found."
