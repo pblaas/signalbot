@@ -12,13 +12,16 @@ class Gnews:
 
     def gnews(self):
         """Return news related content."""
-        if len(self._messageobject.strip().split(" ")) > 1:
-            gnewscase = SwitchCaseGnews(self._messageobject.strip().split(" ")[1])
-        else:
-            gnewscase = SwitchCaseGnews('science')
+        if "GNEWS_APIKEY" in os.environ:
+            if len(self._messageobject.strip().split(" ")) > 1:
+                gnewscase = SwitchCaseGnews(self._messageobject.strip().split(" ")[1])
+            else:
+                gnewscase = SwitchCaseGnews('science')
 
-        gnewsreturn = gnewscase.query().replace('"', '')
-        return gnewsreturn
+            gnewsreturn = gnewscase.query().replace('"', '')
+            return gnewsreturn
+        else:
+            return "No Gnews API key found."
 
 
 class SwitchCaseGnews:
@@ -37,19 +40,16 @@ class SwitchCaseGnews:
 
     def fetch(self):
         """Get news from gnews API."""
-        if "GNEWS_APIKEY" in os.environ:
-            apikey = os.environ['GNEWS_APIKEY']
-            reqinfo = self._query
-            http = urllib3.PoolManager()
-            req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
-            all_news = json.loads(req_return.data.decode('utf-8'))
-            pp(all_news)
-            total_articles = len(all_news['articles'])
-            pp(total_articles)
-            if total_articles > 0:
-                random_article_number = random.randint(0, total_articles-1)
-                return f"""Gnews: {all_news['articles'][random_article_number]['title']} -> {all_news['articles'][random_article_number]['article_url']}"""
-            else:
-                return "Gnews: No articles found."
+        apikey = os.environ['GNEWS_APIKEY']
+        reqinfo = self._query
+        http = urllib3.PoolManager()
+        req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
+        all_news = json.loads(req_return.data.decode('utf-8'))
+        pp(all_news)
+        total_articles = len(all_news['articles'])
+        pp(total_articles)
+        if total_articles > 0:
+            random_article_number = random.randint(0, total_articles-1)
+            return f"""Gnews: {all_news['articles'][random_article_number]['title']} -> {all_news['articles'][random_article_number]['article_url']}"""
         else:
-            return "No Gnews API key found."
+            return "Gnews: No articles found."
