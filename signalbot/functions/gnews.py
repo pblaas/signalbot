@@ -14,7 +14,7 @@ class Gnews:
         """Return news related content."""
         if "GNEWS_APIKEY" in os.environ:
             if len(self._messageobject.strip().split(" ")) > 1:
-                gnewscase = SwitchCaseGnews(self._messageobject.strip().split(" ")[1])
+                gnewscase = SwitchCaseGnews(self._messageobject.strip().split(" ")[1:])
             else:
                 gnewscase = SwitchCaseGnews('science')
 
@@ -41,9 +41,10 @@ class SwitchCaseGnews:
     def fetch(self):
         """Get news from gnews API."""
         apikey = os.environ['GNEWS_APIKEY']
-        reqinfo = self._query
+        reqinfo = "%20"
+        request = reqinfo.join(self._query)
         http = urllib3.PoolManager()
-        req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + reqinfo + '&country=nl&language=nl&api_token=' + apikey)
+        req_return = http.request('GET', 'https://gnewsapi.net/api/search?q=' + request + '&country=nl&language=nl&api_token=' + apikey)
         all_news = json.loads(req_return.data.decode('utf-8'))
         pp(all_news)
         total_articles = len(all_news['articles'])
