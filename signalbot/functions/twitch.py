@@ -36,6 +36,7 @@ class SwitchCaseTwitch:
         topstreams || ts
         pcreleases || pcr
         xboxxreleases || xbxr
+        ps5releases || ps5r
         """
         return getattr(self, str(action), lambda: default)()
 
@@ -202,3 +203,51 @@ class SwitchCaseTwitch:
         {date.fromtimestamp(helixdata[2]['first_release_date'])} -> {helixdata[2]['name']}""")
     # Aliases for pcreleases
     xbxr = xboxxreleases
+
+    def ps5releases(self):
+        """Twitch example function."""
+        clientid = os.environ['TWITCH_CLIENTID']
+
+        now = datetime.now()
+        timestamp = str(datetime.timestamp(now)).split(".")[0]
+
+        http = urllib3.PoolManager()
+        access_token = self._getaccestoken()
+
+        helix_url = http.request(
+            "POST", "https://api.igdb.com/v4/release_dates",
+            headers={
+                "Accept": "application/json",
+                "Authorization": "Bearer " + access_token,
+                "Client-Id": clientid
+            },
+            # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
+            body="fields game; where game.platforms = 167 & date > " + timestamp + "; sort date asc; limit 3;"
+        )
+        helixdata = json.loads(helix_url.data.decode('utf-8'))
+
+        all_games = []
+        for x in range(len(helixdata)):
+            all_games.append(str(helixdata[x]['game']))
+
+        string = ","
+        games = string.join(all_games)
+        helix_url = http.request(
+            "POST", "https://api.igdb.com/v4/games",
+            headers={
+                "Accept": "application/json",
+                "Authorization": "Bearer " + access_token,
+                "Client-Id": clientid
+            },
+            # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
+            body="fields *; where id = (" + games + "); sort date asc; limit 3;"
+        )
+
+        helixdata = json.loads(helix_url.data.decode('utf-8'))
+        return textwrap.dedent(f"""\
+        New PS5 releases:\n
+        {date.fromtimestamp(helixdata[0]['first_release_date'])} -> {helixdata[0]['name']}
+        {date.fromtimestamp(helixdata[1]['first_release_date'])} -> {helixdata[1]['name']}
+        {date.fromtimestamp(helixdata[2]['first_release_date'])} -> {helixdata[2]['name']}""")
+
+    ps5r = ps5releases
