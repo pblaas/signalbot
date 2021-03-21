@@ -40,6 +40,11 @@ if 'READY' in os.environ:
 else:
     READY = False
 
+if 'PRIVATECHAT' in os.environ:
+    PRIVATECHAT = bool(strtobool(os.environ.get('PRIVATECHAT')))
+else:
+    PRIVATECHAT = False
+
 if 'BLACKLIST' in os.environ:
     blacklist = os.environ.get('BLACKLIST').split(',')
 else:
@@ -108,6 +113,22 @@ def parse_message(value):
                         logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
                     logging.info("NOOP due to ready mode set to false.")
+            if PRIVATECHAT:
+                messageobject = Message(
+                    res['envelope']['source'],
+                    res['envelope']['syncMessage']['sentMessage']['message'],
+                    'Null',
+                    res['envelope']['syncMessage']['sentMessage']['timestamp']
+                )
+                if DEBUG:
+                    logging.info(pprint.pprint(res))
+                    logging.info(messageobject.getsource())
+                    logging.info(messageobject.getgroupinfo())
+                    logging.info(messageobject.getmessage())
+                if READY:
+                    run_signalcli(messageobject)
+                else:
+                    logging.info("NOOP due to ready mode set to false.")
 
     if "dataMessage" in res['envelope']:
         if "message" in res['envelope']['dataMessage']:
@@ -128,6 +149,22 @@ def parse_message(value):
                         run_signalcli(messageobject)
                     else:
                         logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
+                else:
+                    logging.info("NOOP due to ready mode set to false.")
+            if PRIVATECHAT:
+                messageobject = Message(
+                    res['envelope']['source'],
+                    res['envelope']['dataMessage']['message'],
+                    'Null',
+                    res['envelope']['dataMessage']['timestamp']
+                )
+                if DEBUG:
+                    logging.info(pprint.pprint(res))
+                    logging.info(messageobject.getsource())
+                    logging.info(messageobject.getgroupinfo())
+                    logging.info(messageobject.getmessage())
+                if READY:
+                    run_signalcli(messageobject)
                 else:
                     logging.info("NOOP due to ready mode set to false.")
 
@@ -188,12 +225,20 @@ def run_signalcli(messageobject):
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
             else:
-                client.containers.run(
-                    SIGNALCLIIMAGE,
-                    "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
-                    auto_remove=True,
-                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                )
+                if PRIVATECHAT:
+                    client.containers.run(
+                        SIGNALCLIIMAGE,
+                        "-u " + REGISTEREDNR + " send  -m " + "\"" + actionmessage + "\"" + " " + messageobject.getsource(),
+                        auto_remove=True,
+                        volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                    )
+                else:
+                    client.containers.run(
+                        SIGNALCLIIMAGE,
+                        "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
+                        auto_remove=True,
+                        volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                    )
 
 
 def group_not_in_blacklist(messageobject, blist):
@@ -219,6 +264,7 @@ if __name__ == '__main__':
     logging.info("Debug " + str(DEBUG))
     logging.info("Local Executor " + str(SIGNALEXECUTORLOCAL))
     logging.info("Ready " + str(READY))
+    logging.info("Private chat " + str(PRIVATECHAT))
     logging.info("Blacklists: " + str(blacklist))
     logging.info("Whitelits: " + str(whitelist))
     while True:
