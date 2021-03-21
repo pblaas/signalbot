@@ -159,6 +159,7 @@ Testcases are written in Pytest and utilize a .env file with the required variab
 READY=False
 DEBUG=True
 SIGNALEXECUTORLOCAL=False
+PRIVATECHAT=False
 REGISTEREDNR="+316"
 GIPHY_APIKEY=""
 GNEWS_APIKEY=""
