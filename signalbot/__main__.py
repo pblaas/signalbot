@@ -230,24 +230,7 @@ def run_signalcli(messageobject):
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
         else:
-            # if SIGNALEXECUTORLOCAL:
-            #    subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
-            # else:
             signal_cli_send(REGISTEREDNR, PRIVATECHAT, GROUPCHAT, SIGNALEXECUTORLOCAL, messageobject, actionmessage)
-            # if PRIVATECHAT:
-            #     client.containers.run(
-            #         SIGNALCLIIMAGE,
-            #         "-u " + REGISTEREDNR + " send  -m " + "\"" + actionmessage + "\"" + " " + messageobject.getsource(),
-            #         auto_remove=True,
-            #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-            #     )
-            # else:
-            #     client.containers.run(
-            #         SIGNALCLIIMAGE,
-            #         "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
-            #         auto_remove=True,
-            #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-            #     )
 
 
 def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, messageobject, actionmessage):
@@ -275,8 +258,8 @@ def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, m
             target_param = "-g " + messageobject.getgroupinfo()
 
             if signalexecutorlocal:
-                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send",
-                                target_param, "-m", actionmessage], stdout=subprocess.PIPE, text=True,
+                subprocess.run(['/signal/bin/signal-cli', '--config', '/config', '-u', REGISTEREDNR, 'send', '-g',
+                                messageobject.getgroupinfo(), '-m', actionmessage], stdout=subprocess.PIPE, text=True,
                                check=True)
             else:
                 client.containers.run(
