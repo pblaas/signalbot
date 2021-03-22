@@ -24,7 +24,7 @@ docker run -v $HOME/signal:/config --rm -it pblaas/signalcli:latest -h
 
 ## having some fun
 ```
-echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` | docker run -v $HOME/signal:/config --rm -i signal:dev -u +31630030905 send --g "2SElh8hai/NQTSNaBOpHKBc0BbYE90l1iQyXAQzfeoE="
+echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` | docker run -v $HOME/signal:/config --rm -i signal:dev -u +316 send --g "2SExxxxxxxx"
 ```
 
 ## bot ideas
