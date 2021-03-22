@@ -311,6 +311,7 @@ if __name__ == '__main__':
     logging.info("Local Executor " + str(SIGNALEXECUTORLOCAL))
     logging.info("Ready " + str(READY))
     logging.info("Private chat " + str(PRIVATECHAT))
+    logging.info("Group Chat " + str(GROUPCHAT))
     logging.info("Blacklists: " + str(blacklist))
     logging.info("Whitelits: " + str(whitelist))
     while True:
