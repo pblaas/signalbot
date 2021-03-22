@@ -230,49 +230,62 @@ def run_signalcli(messageobject):
                     volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
                 )
         else:
-            if SIGNALEXECUTORLOCAL:
-                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
-            else:
-                signal_cli_send(REGISTEREDNR, PRIVATECHAT, GROUPCHAT, messageobject, actionmessage)
-                # if PRIVATECHAT:
-                #     client.containers.run(
-                #         SIGNALCLIIMAGE,
-                #         "-u " + REGISTEREDNR + " send  -m " + "\"" + actionmessage + "\"" + " " + messageobject.getsource(),
-                #         auto_remove=True,
-                #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                #     )
-                # else:
-                #     client.containers.run(
-                #         SIGNALCLIIMAGE,
-                #         "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
-                #         auto_remove=True,
-                #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                #     )
+            # if SIGNALEXECUTORLOCAL:
+            #    subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
+            # else:
+            signal_cli_send(REGISTEREDNR, PRIVATECHAT, GROUPCHAT, SIGNALEXECUTORLOCAL, messageobject, actionmessage)
+            # if PRIVATECHAT:
+            #     client.containers.run(
+            #         SIGNALCLIIMAGE,
+            #         "-u " + REGISTEREDNR + " send  -m " + "\"" + actionmessage + "\"" + " " + messageobject.getsource(),
+            #         auto_remove=True,
+            #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+            #     )
+            # else:
+            #     client.containers.run(
+            #         SIGNALCLIIMAGE,
+            #         "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
+            #         auto_remove=True,
+            #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+            #     )
 
 
-def signal_cli_send(registerednr, privatechat, groupchat, messageobject, actionmessage):
+def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, messageobject, actionmessage):
     # check if messageobject contains groupinfo
     # check if PRIVATECHAT is True
 
     if messageobject.getgroupinfo() is None and privatechat:
         # this is a private one on one chat
         target_param = messageobject.getsource()
-        client.containers.run(
-            SIGNALCLIIMAGE,
-            "-u " + registerednr + " send -m " + "\"" + actionmessage + "\" " + target_param,
-            auto_remove=True,
-            volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-        )
-    else:
-        if groupchat:
-            # this is a group chat
-            target_param = "-g " + messageobject.getgroupinfo()
+
+        if signalexecutorlocal:
+            subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send",
+                            target_param, "-m", actionmessage], stdout=subprocess.PIPE, text=True,
+                           check=True)
+        else:
             client.containers.run(
                 SIGNALCLIIMAGE,
                 "-u " + registerednr + " send -m " + "\"" + actionmessage + "\" " + target_param,
                 auto_remove=True,
                 volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
             )
+    else:
+        if groupchat:
+            # this is a group chat
+            target_param = "-g " + messageobject.getgroupinfo()
+
+            if signalexecutorlocal:
+                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send",
+                                target_param, "-m", actionmessage], stdout=subprocess.PIPE, text=True,
+                               check=True)
+            else:
+                client.containers.run(
+                    SIGNALCLIIMAGE,
+                    "-u " + registerednr + " send -m " + "\"" + actionmessage + "\" " + target_param,
+                    auto_remove=True,
+                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                )
+
 
 def group_not_in_blacklist(messageobject, blist):
     for groupid in blist:
