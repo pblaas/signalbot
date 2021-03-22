@@ -45,6 +45,11 @@ if 'PRIVATECHAT' in os.environ:
 else:
     PRIVATECHAT = False
 
+if 'GROUPCHAT' in os.environ:
+    GROUPCHAT = bool(strtobool(os.environ.get('GROUPCHAT')))
+else:
+    GROUPCHAT = True
+
 if 'BLACKLIST' in os.environ:
     blacklist = os.environ.get('BLACKLIST').split(',')
 else:
@@ -92,6 +97,8 @@ def parse_message(value):
     res = json.loads(value)
     if DEBUG:
         pprint.pprint(res)
+
+    # Messages send by the registered number itself.
     if "syncMessage" in res['envelope']:
         if "sentMessage" in res['envelope']['syncMessage']:
             if "groupInfo" in res['envelope']['syncMessage']['sentMessage']:
@@ -113,11 +120,11 @@ def parse_message(value):
                         logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
                     logging.info("NOOP due to ready mode set to false.")
-            if PRIVATECHAT:
+            if PRIVATECHAT and "groupInfo" not in res['envelope']['syncMessage']['sentMessage']:
                 messageobject = Message(
                     res['envelope']['source'],
                     res['envelope']['syncMessage']['sentMessage']['message'],
-                    'Null',
+                    None,
                     res['envelope']['syncMessage']['sentMessage']['timestamp']
                 )
                 if DEBUG:
@@ -130,6 +137,7 @@ def parse_message(value):
                 else:
                     logging.info("NOOP due to ready mode set to false.")
 
+    # Messages send by others.
     if "dataMessage" in res['envelope']:
         if "message" in res['envelope']['dataMessage']:
             if "groupInfo" in res['envelope']['dataMessage']:
@@ -151,11 +159,11 @@ def parse_message(value):
                         logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
                     logging.info("NOOP due to ready mode set to false.")
-            if PRIVATECHAT:
+            if PRIVATECHAT and "groupInfo" not in res['envelope']['dataMessage']:
                 messageobject = Message(
                     res['envelope']['source'],
                     res['envelope']['dataMessage']['message'],
-                    'Null',
+                    None,
                     res['envelope']['dataMessage']['timestamp']
                 )
                 if DEBUG:
@@ -225,21 +233,46 @@ def run_signalcli(messageobject):
             if SIGNALEXECUTORLOCAL:
                 subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
             else:
-                if PRIVATECHAT:
-                    client.containers.run(
-                        SIGNALCLIIMAGE,
-                        "-u " + REGISTEREDNR + " send  -m " + "\"" + actionmessage + "\"" + " " + messageobject.getsource(),
-                        auto_remove=True,
-                        volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                    )
-                else:
-                    client.containers.run(
-                        SIGNALCLIIMAGE,
-                        "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
-                        auto_remove=True,
-                        volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                    )
+                signal_cli_send(REGISTEREDNR, PRIVATECHAT, GROUPCHAT, messageobject, actionmessage)
+                # if PRIVATECHAT:
+                #     client.containers.run(
+                #         SIGNALCLIIMAGE,
+                #         "-u " + REGISTEREDNR + " send  -m " + "\"" + actionmessage + "\"" + " " + messageobject.getsource(),
+                #         auto_remove=True,
+                #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                #     )
+                # else:
+                #     client.containers.run(
+                #         SIGNALCLIIMAGE,
+                #         "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -m " + "\"" + actionmessage + "\"",
+                #         auto_remove=True,
+                #         volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                #     )
 
+
+def signal_cli_send(registerednr, privatechat, groupchat, messageobject, actionmessage):
+    # check if messageobject contains groupinfo
+    # check if PRIVATECHAT is True
+
+    if messageobject.getgroupinfo() is None and privatechat:
+        # this is a private one on one chat
+        target_param = messageobject.getsource()
+        client.containers.run(
+            SIGNALCLIIMAGE,
+            "-u " + registerednr + " send -m " + "\"" + actionmessage + "\" " + target_param,
+            auto_remove=True,
+            volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+        )
+    else:
+        if groupchat:
+            # this is a group chat
+            target_param = "-g " + messageobject.getgroupinfo()
+            client.containers.run(
+                SIGNALCLIIMAGE,
+                "-u " + registerednr + " send -m " + "\"" + actionmessage + "\" " + target_param,
+                auto_remove=True,
+                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+            )
 
 def group_not_in_blacklist(messageobject, blist):
     for groupid in blist:
