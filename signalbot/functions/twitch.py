@@ -126,7 +126,7 @@ class SwitchCaseTwitch:
                 "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
-            body="fields game; where game.platforms = 6 & date > " + timestamp + "; sort date asc; limit 3;"
+            body="fields game; where game.platforms = 6 & date > " + timestamp + "; sort date asc; limit 5;"
         )
         helixdata = json.loads(helix_url.data.decode('utf-8'))
 
@@ -144,15 +144,14 @@ class SwitchCaseTwitch:
                 "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
-            body="fields *; where id = (" + games + "); sort date asc; limit 3;"
+            body="fields *; where id = (" + games + "); sort date asc; limit 5;"
         )
 
         helixdata = json.loads(helix_url.data.decode('utf-8'))
-        return textwrap.dedent(f"""\
-        New PC releases:\n
-        {date.fromtimestamp(helixdata[0]['first_release_date'])} -> {helixdata[0]['name']}
-        {date.fromtimestamp(helixdata[1]['first_release_date'])} -> {helixdata[1]['name']}
-        {date.fromtimestamp(helixdata[2]['first_release_date'])} -> {helixdata[2]['name']}""")
+        pcrstring = ""
+        for n in range(0, len(helixdata)):
+            pcrstring += f"{date.fromtimestamp(helixdata[n]['first_release_date'])} -> {helixdata[n]['name']}\n"
+        return textwrap.dedent(f"New PC releases:\n{pcrstring}")
     # Aliases for pcreleases
     pcr = pcreleases
 
@@ -174,7 +173,7 @@ class SwitchCaseTwitch:
                 "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
-            body="fields game; where game.platforms = 169 & date > " + timestamp + "; sort date asc; limit 3;"
+            body="fields game; where game.platforms = 169 & date > " + timestamp + "; sort date asc; limit 5;"
         )
         helixdata = json.loads(helix_url.data.decode('utf-8'))
 
@@ -192,15 +191,14 @@ class SwitchCaseTwitch:
                 "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
-            body="fields *; where id = (" + games + "); sort date asc; limit 3;"
+            body="fields *; where id = (" + games + "); sort date asc; limit 5;"
         )
 
         helixdata = json.loads(helix_url.data.decode('utf-8'))
-        return textwrap.dedent(f"""\
-        New Xbox series X releases:\n
-        {date.fromtimestamp(helixdata[0]['first_release_date'])} -> {helixdata[0]['name']}
-        {date.fromtimestamp(helixdata[1]['first_release_date'])} -> {helixdata[1]['name']}
-        {date.fromtimestamp(helixdata[2]['first_release_date'])} -> {helixdata[2]['name']}""")
+        xboxrstring = ""
+        for n in range(0, len(helixdata)):
+            xboxrstring += f"{date.fromtimestamp(helixdata[n]['first_release_date'])} -> {helixdata[n]['name']}\n"
+        return textwrap.dedent(f"New Xbox series X releases:\n{xboxrstring}")
     # Aliases for pcreleases
     xbxr = xboxxreleases
 
@@ -222,7 +220,7 @@ class SwitchCaseTwitch:
                 "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
-            body="fields game; where game.platforms = 167 & date > " + timestamp + "; sort date asc; limit 3;"
+            body="fields game; where game.platforms = 167 & date > " + timestamp + "; sort date asc; limit 5;"
         )
         helixdata = json.loads(helix_url.data.decode('utf-8'))
 
@@ -240,14 +238,13 @@ class SwitchCaseTwitch:
                 "Client-Id": clientid
             },
             # body="fields category,checksum,created_at,date,game,human,m,platform,region,updated_at,y;where y = 2021;where m = 1;"
-            body="fields *; where id = (" + games + "); sort date asc; limit 3;"
+            body="fields *; where id = (" + games + "); sort date asc; limit 5;"
         )
 
         helixdata = json.loads(helix_url.data.decode('utf-8'))
-        return textwrap.dedent(f"""\
-        New PS5 releases:\n
-        {date.fromtimestamp(helixdata[0]['first_release_date'])} -> {helixdata[0]['name']}
-        {date.fromtimestamp(helixdata[1]['first_release_date'])} -> {helixdata[1]['name']}
-        {date.fromtimestamp(helixdata[2]['first_release_date'])} -> {helixdata[2]['name']}""")
+        ps5rstring = ""
+        for n in range(0, len(helixdata)):
+            ps5rstring += f"{date.fromtimestamp(helixdata[n]['first_release_date'])} -> {helixdata[n]['name']}\n"
+        return textwrap.dedent(f"New PS5 releases:\n{ps5rstring}")
 
     ps5r = ps5releases
