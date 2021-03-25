@@ -6,6 +6,7 @@ import json
 import time
 import docker
 import subprocess
+import shlex
 import logging
 import sys
 from distutils.util import strtobool
@@ -178,7 +179,7 @@ def parse_message(value):
 
 
 def run_signalcli(messageobject):
-    """Run SignalCLI and return messages."""
+    """Collect variables which should be passes to the cli send command."""
     global client, home
     if isinstance(messageobject.getmessage(), str) and messageobject.getmessage().startswith('!'):
 
@@ -188,85 +189,61 @@ def run_signalcli(messageobject):
         if not SIGNALEXECUTORLOCAL:
             client = docker.from_env()
             home = os.environ['HOME']
-
-        if messageobject.getmessage() == "!gif" and actionmessage == "Gif":
-            if SIGNALEXECUTORLOCAL:
-                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", "", "-a", "/tmp/signal/giphy.gif"], stdout=subprocess.PIPE, text=True, shell=False)
-            else:
-                client.containers.run(
-                    SIGNALCLIIMAGE,
-                    "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /config/giphy.gif",
-                    auto_remove=True,
-                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                )
-        elif messageobject.getmessage() == "!xkcd" and actionmessage == "xkcd":
-            if SIGNALEXECUTORLOCAL:
-                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send", "-g", messageobject.getgroupinfo(), "-m", "", "-a", "/tmp/signal/image.png"], stdout=subprocess.PIPE, text=True, shell=False)
-            else:
-                client.containers.run(
-                    SIGNALCLIIMAGE,
-                    "-u " + REGISTEREDNR + " send -g " + messageobject.getgroupinfo() + " -a /config/image.png",
-                    auto_remove=True,
-                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                )
-        elif messageobject.getmessage() == "!rand":
-            if SIGNALEXECUTORLOCAL:
-                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "updateGroup", "-g", messageobject.getgroupinfo(), "-n", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
-            else:
-                client.containers.run(
-                    SIGNALCLIIMAGE,
-                    "updateGroup -g " + messageobject.getgroupinfo() + " -n " + "\"" + actionmessage + "\"",
-                    auto_remove=True,
-                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                )
-        elif messageobject.getmessage() == "!me":
-            if SIGNALEXECUTORLOCAL:
-                subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "sendReaction", "-g", messageobject.getgroupinfo(), "-a", messageobject.getsource(), "-t", messageobject.gettimestamp(), "-e", actionmessage], stdout=subprocess.PIPE, text=True, check=True)
-            else:
-                client.containers.run(
-                    SIGNALCLIIMAGE,
-                    "-u " + REGISTEREDNR + " sendReaction -g " + messageobject.getgroupinfo() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e " + actionmessage,
-                    auto_remove=True,
-                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
-                )
-        else:
-            signal_cli_send(REGISTEREDNR, PRIVATECHAT, GROUPCHAT, SIGNALEXECUTORLOCAL, messageobject, actionmessage)
+        signal_cli_send(REGISTEREDNR, PRIVATECHAT, GROUPCHAT, SIGNALEXECUTORLOCAL, messageobject, actionmessage)
 
 
 def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, messageobject, actionmessage):
-    # check if messageobject contains groupinfo
-    # check if PRIVATECHAT is True
+    """ Signal CLI command execution"""
+    localsignalcli = "/signal/bin/signal-cli --config /config "
 
     if messageobject.getgroupinfo() is None and privatechat:
         # this is a private one on one chat
-        target_param = messageobject.getsource()
+        if messageobject.getmessage() == "!gif" and actionmessage == "Gif":
+            target_param = " -u " + registerednr + " send " + messageobject.getsource() + " -a /tmp/signal/giphy.gif " + " -m "
+        elif messageobject.getmessage() == "!xkcd" and actionmessage == "xkcd":
+            target_param = " -u " + registerednr + " send " + messageobject.getsource() + " -a /tmp/signal/image.png " + " -m "
+        elif messageobject.getmessage() == "!me":
+            target_param = " -u " + registerednr + " sendReaction " + messageobject.getsource() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e "
+        else:
+            target_param = " -u " + registerednr + " send " + messageobject.getsource() + " -m "
 
         if signalexecutorlocal:
-            subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-u", REGISTEREDNR, "send",
-                            target_param, "-m", actionmessage], stdout=subprocess.PIPE, text=True,
-                           check=True)
+            args = shlex.split(localsignalcli + target_param)
+            args.append(actionmessage)
+            subprocess.Popen(args)
         else:
             client.containers.run(
                 SIGNALCLIIMAGE,
-                "-u " + registerednr + " send -m " + "\"" + actionmessage + "\" " + target_param,
+                target_param + "\"" + actionmessage + "\"",
                 auto_remove=True,
-                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'},
+                         '/tmp/signal': {'bind': '/tmp/signal', 'mode': 'rw'}}
             )
     else:
         if groupchat:
             # this is a group chat
-            target_param = "-g " + messageobject.getgroupinfo()
+            if messageobject.getmessage() == "!gif" and actionmessage == "Gif":
+                target_param = "-u " + registerednr + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/giphy.gif " + " -m "
+            elif messageobject.getmessage() == "!xkcd" and actionmessage == "xkcd":
+                target_param = " -u " + registerednr + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/image.png " + " -m "
+            elif messageobject.getmessage() == "!me":
+                target_param = " -u " + registerednr + " sendReaction " + "-g " + messageobject.getgroupinfo() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e "
+            elif messageobject.getmessage() == "!rand":
+                target_param = "-u " + registerednr + " updateGroup -g " + messageobject.getgroupinfo() + " -n "
+            else:
+                target_param = "-u " + registerednr + " send -g " + messageobject.getgroupinfo() + " -m "
 
             if signalexecutorlocal:
-                subprocess.run(['/signal/bin/signal-cli', '--config', '/config', '-u', REGISTEREDNR, 'send', '-g',
-                                messageobject.getgroupinfo(), '-m', actionmessage], stdout=subprocess.PIPE, text=True,
-                               check=True)
+                args = shlex.split(localsignalcli + target_param)
+                args.append(actionmessage)
+                subprocess.Popen(args)
             else:
                 client.containers.run(
                     SIGNALCLIIMAGE,
-                    "-u " + registerednr + " send -m " + "\"" + actionmessage + "\" " + target_param,
+                    target_param + "\"" + actionmessage + "\"",
                     auto_remove=True,
-                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'}}
+                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'},
+                             '/tmp/signal': {'bind': '/tmp/signal', 'mode': 'rw'}}
                 )
 
 
