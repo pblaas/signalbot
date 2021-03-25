@@ -2,7 +2,6 @@
 
 import urllib3
 import json
-import os
 import shutil
 import random
 
@@ -19,16 +18,9 @@ class Xkcd:
         xkcd_json = json.loads(req_xkcd.data.decode('utf-8'))
 
         if xkcd_json['title']:
-            if self._signalexecutorlocal is False:
-                home = os.environ['HOME']
-                with open(home + "/signal/image.png", 'wb') as out:
-                    r = http.request('GET', xkcd_json['img'], preload_content=False)
-                    shutil.copyfileobj(r, out)
-            else:
-                with open("/tmp/signal/image.png", 'wb') as out:
-                    r = http.request('GET', xkcd_json['img'], preload_content=False)
-                    shutil.copyfileobj(r, out)
-
+            with open("/tmp/signal/image.png", 'wb') as out:
+                r = http.request('GET', xkcd_json['img'], preload_content=False)
+                shutil.copyfileobj(r, out)
             return "xkcd"
 
         else:
