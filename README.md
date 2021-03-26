@@ -36,8 +36,6 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !me - return with random reply [DONE]
 * !version - show version [DONE]
 * !help - show available commands [DONE]
-* !ai - return interesting AI facts?
-* !sexy - sexy images
 * !haiku - show japanese poem [DONE]
 * !names - random names based on python haikunator implementation [DONE]
 * !launch - return lanched message and send source a image of impact.
