@@ -8,6 +8,6 @@ class Rand:
 
     @staticmethod
     def rand():
-        """Return a random number between 0 and 1000."""
+        """Return a random string.."""
         haikunator = Haikunator()
         return haikunator.haikunate(token_length=0, delimiter=' ')

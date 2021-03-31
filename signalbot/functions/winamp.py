@@ -8,6 +8,6 @@ class Winamp:
 
     @staticmethod
     def winamp():
-        """Return random Emoij."""
+        """Return winamp line and Emoij."""
         thumb = emoji.emojize(':llama:')
         return "It really whips the " + thumb + " ass."
