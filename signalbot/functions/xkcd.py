@@ -12,7 +12,7 @@ class Xkcd:
     def xkcd(self):
         """Get random images from xkcd platform."""
 
-        random_int = random.randint(1, 2421)
+        random_int = random.randint(1, 2443)
         http = urllib3.PoolManager()
         req_xkcd = http.request('GET', "https://xkcd.com/" + str(random_int) + "/info.0.json")
         xkcd_json = json.loads(req_xkcd.data.decode('utf-8'))
