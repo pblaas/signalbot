@@ -28,6 +28,6 @@ class Gif:
                 return "Gif"
 
             else:
-                return "No valid repsonse for Giphy API."
+                return "No valid repsonse for Giphy API."  # pragma: no cover
         else:
             return "No Giphy API key found."
