@@ -35,11 +35,11 @@ def test_switch_get_function_twitch_get_pcreleases(switchcasetwitch):
 
 
 def test_switch_get_function_twitch_get_xboxxreleases(switchcasetwitch):
-    assert re.match(r'\s*New Xbox series X releases:', switchcasetwitch.xboxxreleases())
+    assert 'Xbox series X releases' in switchcasetwitch.xboxxreleases()
 
 
 def test_switch_get_function_twitch_get_ps5releases(switchcasetwitch):
-    assert re.match(r'\s*New PS5 releases:', switchcasetwitch.ps5releases())
+    assert 'PS5 releases' in switchcasetwitch.ps5releases()
 
 
 def test_switch_get_function_twitch_no_clientid(monkeypatch):

@@ -196,9 +196,12 @@ class SwitchCaseTwitch:
 
         helixdata = json.loads(helix_url.data.decode('utf-8'))
         xboxrstring = ""
-        for n in range(0, len(helixdata)):
-            xboxrstring += f"{date.fromtimestamp(helixdata[n]['first_release_date'])} -> {helixdata[n]['name']}\n"
-        return textwrap.dedent(f"New Xbox series X releases:\n{xboxrstring}")
+        if 'first_release_data' in helixdata:
+            for n in range(0, len(helixdata)):
+                xboxrstring += f"{date.fromtimestamp(helixdata[n]['first_release_date'])} -> {helixdata[n]['name']}\n"
+            return textwrap.dedent(f"New Xbox series X releases:\n{xboxrstring}")
+        else:
+            return textwrap.dedent(f"No Xbox series X releases found.")
     # Aliases for pcreleases
     xbxr = xboxxreleases
 
@@ -243,8 +246,11 @@ class SwitchCaseTwitch:
 
         helixdata = json.loads(helix_url.data.decode('utf-8'))
         ps5rstring = ""
-        for n in range(0, len(helixdata)):
-            ps5rstring += f"{date.fromtimestamp(helixdata[n]['first_release_date'])} -> {helixdata[n]['name']}\n"
-        return textwrap.dedent(f"New PS5 releases:\n{ps5rstring}")
+        if 'first_release_data' in helixdata:
+            for n in range(0, len(helixdata)):
+                ps5rstring += f"{date.fromtimestamp(helixdata[n]['first_release_date'])} -> {helixdata[n]['name']}\n"
+            return textwrap.dedent(f"New PS5 releases:\n{ps5rstring}")
+        else:
+            return textwrap.dedent(f"No PS5 releases found.")
 
     ps5r = ps5releases
