@@ -8,6 +8,6 @@ class Me:
 
     @staticmethod
     def me():
-        """Return random Emoij."""
+        """Return eggplant Emoij."""
         thumb = emoji.emojize(':eggplant:')
         return thumb

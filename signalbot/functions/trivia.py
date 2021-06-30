@@ -11,7 +11,7 @@ class Trivia:
 
     @staticmethod
     def trivia():
-        """Get random jokes from chucknorris API."""
+        """Get random questions from opentdb trivia API."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://opentdb.com/api.php?amount=1')
         trivia_data = json.loads(req_return.data.decode('utf-8'))

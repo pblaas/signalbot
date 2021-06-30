@@ -22,6 +22,6 @@ class Hn:
             if 'url' in story_data:
                 return thumb + " Hacker News: [" + str(story_data['score']) + "] " + story_data['title'] + " -> " + story_data['url']
             else:
-                return "Hacker News: Unable to retrieve news."
+                return "Hacker News: Unable to retrieve news."  # pragma: no cover
         else:
-            return "Hacker News: unable to access api."
+            return "Hacker News: unable to access api."  # pragma: no cover

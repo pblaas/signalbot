@@ -8,7 +8,7 @@ class TestEmoji:
 
     @staticmethod
     def testemoji():
-        """Return random Emoij."""
+        """Return  Emoij."""
         tv2 = emoji.emojize(':tv2:')
         movie_camera = emoji.emojize(':movie_camera:')
         apple2 = emoji.emojize(':apple2:')

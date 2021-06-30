@@ -9,7 +9,7 @@ class Bored:
 
     @staticmethod
     def bored():
-        """Get random jokes from chucknorris API."""
+        """Get random recommendations from boredapi."""
         http = urllib3.PoolManager()
         req_return = http.request('GET', 'https://www.boredapi.com/api/activity?type=recreational')
         activity_data = json.loads(req_return.data.decode('utf-8'))

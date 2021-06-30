@@ -8,6 +8,6 @@ class Dog:
 
     @staticmethod
     def dog():
-        """Return random Emoij."""
+        """Return dog Emoij."""
         dog = emoji.emojize(':dog:')
         return dog + " WOEF,  WAFFF! " + dog

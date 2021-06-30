@@ -12,8 +12,13 @@ class Xkcd:
     def xkcd(self):
         """Get random images from xkcd platform."""
 
-        random_int = random.randint(1, 2421)
+        # Retrieve the latest issue number.
         http = urllib3.PoolManager()
+        req_xkcd_latest = http.request('GET', "https://xkcd.com/" + "/info.0.json")
+        xkcd_json_latest = json.loads(req_xkcd_latest.data.decode('utf-8'))
+
+        # Retrieve a random issue from min and max issue number range.
+        random_int = random.randint(1, xkcd_json_latest['num'])
         req_xkcd = http.request('GET', "https://xkcd.com/" + str(random_int) + "/info.0.json")
         xkcd_json = json.loads(req_xkcd.data.decode('utf-8'))
 

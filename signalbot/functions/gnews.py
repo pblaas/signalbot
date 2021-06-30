@@ -53,4 +53,4 @@ class SwitchCaseGnews:
             random_article_number = random.randint(0, total_articles-1)
             return f"""Gnews: {all_news['articles'][random_article_number]['title']} -> {all_news['articles'][random_article_number]['article_url']}"""
         else:
-            return "Gnews: No articles found."
+            return "Gnews: No articles found."  # pragma: no cover

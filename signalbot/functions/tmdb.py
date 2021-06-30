@@ -78,7 +78,7 @@ class SwitchCaseTmdb:
             item_return_string = new_line.join(item_array)
             return f"""The Movie DB Movie Release Dates:\n\n{item_return_string}"""
         else:
-            return "tmdb: no items found."
+            return "tmdb: no items found."  # pragma: no cover
 
     mr = movierelease
 
@@ -121,7 +121,7 @@ class SwitchCaseTmdb:
             Vote count: {all_items['results'][0]['vote_count']}
             First aired: {first_date_date}""")
         else:
-            return "tmdb: no items found."
+            return "tmdb: no items found."  # pragma: no cover
 
     def tvshowrelease(self):
         """Get tvshow release date info from tmdb API."""
@@ -146,7 +146,7 @@ class SwitchCaseTmdb:
             item_return_string = new_line.join(item_array)
             return f"""The Movie DB tvshow Release Dates:\n\n{item_return_string}"""
         else:
-            return "tmdb: no items found."
+            return "tmdb: no items found."  # pragma: no cover
 
     tvr = tvshowrelease
 
@@ -168,6 +168,6 @@ class SwitchCaseTmdb:
             item_return_string = new_line.join(item_array)
             return f"""The Movie DB New TVshow Release Dates:\n\n{item_return_string}"""
         else:
-            return "tmdb: no items found."
+            return "tmdb: no items found."  # pragma: no cover
 
     ntv = newtvshow

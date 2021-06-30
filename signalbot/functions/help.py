@@ -17,7 +17,6 @@ class Help:
         !chuck
         !gif
         !haiku
-        !names
         !hn
         !twitch
         !bored

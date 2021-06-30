@@ -1,5 +1,20 @@
 from functions.tmdb import SwitchCaseTmdb
 from botfunctions import SwitchCase
+import pytest
+
+
+@pytest.fixture
+def switchcase():
+    return SwitchCase('7.7.7', 'Patrick', True, '')
+
+
+def test_switch_get_function_tmdb_without_option(switchcase):
+    assert 'tmdb subcommands' in switchcase.switch('!tmdb')
+
+
+def test_switch_get_function_get_tmdb_movie():
+    t = SwitchCase('7.7.7', 'Patrick', True, '!tmdb movie the matrix')
+    assert 'The Movie DB Movie Info' in t.switch('!tmdb movie the matrix')
 
 
 def test_switch_get_function_tmdb_movie():
