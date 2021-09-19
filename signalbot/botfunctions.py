@@ -5,7 +5,7 @@ import functions
 
 class SwitchCase(
     functions.Help, functions.Bored, functions.Chuck, functions.Dog, functions.Flip, functions.Gif,
-    functions.Gnews, functions.Haiku, functions.Hn, functions.Me, functions.Rand, functions.Test,
+    functions.Haiku, functions.Hn, functions.Me, functions.Rand, functions.Test,
     functions.Trivia, functions.Twitch, functions.Version, functions.Winamp, functions.TestEmoji,
     functions.Xkcd, functions.Tmdb
 ):
