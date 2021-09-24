@@ -276,4 +276,4 @@ if __name__ == '__main__':
     logging.info("Whitelits: " + str(whitelist))
     while True:
         init_program()
-        time.sleep(2)
+        time.sleep(6)
