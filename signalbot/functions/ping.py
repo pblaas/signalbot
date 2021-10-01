@@ -7,4 +7,4 @@ class Ping:
     @staticmethod
     def ping():
         """Return pong on ping."""
-        return " Pong! "
+        return " pong! "
