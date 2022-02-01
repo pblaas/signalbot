@@ -243,7 +243,7 @@ def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, m
                 SIGNALCLIIMAGE,
                 target_param + "\"" + actionmessage + "\"",
                 auto_remove=True,
-                volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'},
+                volumes={home + '/signalbot': {'bind': '/config', 'mode': 'rw'},
                          '/tmp/signal': {'bind': '/tmp/signal', 'mode': 'rw'}}
             )
     else:
@@ -269,7 +269,7 @@ def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, m
                     SIGNALCLIIMAGE,
                     target_param + "\"" + actionmessage + "\"",
                     auto_remove=True,
-                    volumes={home + '/signal': {'bind': '/config', 'mode': 'rw'},
+                    volumes={home + '/signalbot': {'bind': '/config', 'mode': 'rw'},
                              '/tmp/signal': {'bind': '/tmp/signal', 'mode': 'rw'}}
                 )
 
