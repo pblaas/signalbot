@@ -226,13 +226,13 @@ def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, m
     if messageobject.getgroupinfo() is None and privatechat:
         # this is a private one on one chat
         if messageobject.getmessage() == "!gif" and actionmessage == "Gif":
-            target_param = " -u " + registerednr + " send " + messageobject.getsource() + " -a /tmp/signal/giphy.gif " + " -m "
+            target_param = " -a " + registerednr + " send " + messageobject.getsource() + " --attachment /tmp/signal/giphy.gif " + " -m "
         elif messageobject.getmessage() == "!xkcd" and actionmessage == "xkcd":
-            target_param = " -u " + registerednr + " send " + messageobject.getsource() + " -a /tmp/signal/image.png " + " -m "
+            target_param = " -a " + registerednr + " send " + messageobject.getsource() + " --attachment /tmp/signal/image.png " + " -m "
         elif messageobject.getmessage() == "!me":
-            target_param = " -u " + registerednr + " sendReaction " + messageobject.getsource() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e "
+            target_param = " -a " + registerednr + " sendReaction " + messageobject.getsource() + " --attachment " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e "
         else:
-            target_param = " -u " + registerednr + " send " + messageobject.getsource() + " -m "
+            target_param = " -a " + registerednr + " send " + messageobject.getsource() + " -m "
 
         if signalexecutorlocal:
             args = shlex.split(localsignalcli + target_param)
@@ -243,22 +243,22 @@ def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, m
                 SIGNALCLIIMAGE,
                 target_param + "\"" + actionmessage + "\"",
                 auto_remove=True,
-                volumes={home + '/signalbot': {'bind': '/config', 'mode': 'rw'},
+                volumes={home + '/sender': {'bind': '/config', 'mode': 'rw'},
                          '/tmp/signal': {'bind': '/tmp/signal', 'mode': 'rw'}}
             )
     else:
         if groupchat:
             # this is a group chat
             if messageobject.getmessage() == "!gif" and actionmessage == "Gif":
-                target_param = "-u " + registerednr + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/giphy.gif " + " -m "
+                target_param = "-a " + registerednr + " send -g " + messageobject.getgroupinfo() + " --attachment /tmp/signal/giphy.gif " + " -m "
             elif messageobject.getmessage() == "!xkcd" and actionmessage == "xkcd":
-                target_param = " -u " + registerednr + " send -g " + messageobject.getgroupinfo() + " -a /tmp/signal/image.png " + " -m "
+                target_param = " -a " + registerednr + " send -g " + messageobject.getgroupinfo() + " --attachment /tmp/signal/image.png " + " -m "
             elif messageobject.getmessage() == "!me":
-                target_param = " -u " + registerednr + " sendReaction " + "-g " + messageobject.getgroupinfo() + " -a " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e "
+                target_param = " -a " + registerednr + " sendReaction " + "-g " + messageobject.getgroupinfo() + " --attachment " + messageobject.getsource() + " -t " + messageobject.gettimestamp() + " -e "
             elif messageobject.getmessage() == "!rand":
-                target_param = "-u " + registerednr + " updateGroup -g " + messageobject.getgroupinfo() + " -n "
+                target_param = " -a " + registerednr + " updateGroup -g " + messageobject.getgroupinfo() + " -n "
             else:
-                target_param = "-u " + registerednr + " send -g " + messageobject.getgroupinfo() + " -m "
+                target_param = " -a " + registerednr + " send -g " + messageobject.getgroupinfo() + " -m "
 
             if signalexecutorlocal:
                 args = shlex.split(localsignalcli + target_param)
@@ -269,7 +269,7 @@ def signal_cli_send(registerednr, privatechat, groupchat, signalexecutorlocal, m
                     SIGNALCLIIMAGE,
                     target_param + "\"" + actionmessage + "\"",
                     auto_remove=True,
-                    volumes={home + '/signalbot': {'bind': '/config', 'mode': 'rw'},
+                    volumes={home + '/sender': {'bind': '/config', 'mode': 'rw'},
                              '/tmp/signal': {'bind': '/tmp/signal', 'mode': 'rw'}}
                 )
 

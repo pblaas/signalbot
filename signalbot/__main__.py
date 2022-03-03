@@ -83,7 +83,7 @@ def init_program():
                 SIGNALCLIIMAGE,
                 "-o json -u " + REGISTEREDNR + " receive",
                 auto_remove=True,
-                volumes={homedir + '/signalbot': {'bind': '/config', 'mode': 'rw'}}
+                volumes={homedir + '/poller': {'bind': '/config', 'mode': 'rw'}}
             )
             output = out.decode('utf-8')
         lines = []
