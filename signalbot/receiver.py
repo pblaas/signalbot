@@ -84,38 +84,6 @@ def main():
     print(' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
 
-# def init_program():
-#     """Initialize start of program."""
-#     try:
-#
-#         homedir = os.environ['HOME']
-#         if SIGNALEXECUTORLOCAL:
-#             out = subprocess.run(["/signal/bin/signal-cli", "--config", "/config", "-o", "json", "-u", REGISTEREDNR, "receive"], stdout=subprocess.PIPE, text=True)
-#             output = out.stdout
-#         else:
-#             dockerclient = docker.from_env()
-#             out = dockerclient.containers.run(
-#                 SIGNALCLIIMAGE,
-#                 "-o json -u " + REGISTEREDNR + " receive",
-#                 auto_remove=True,
-#                 volumes={homedir + '/signal': {'bind': '/config', 'mode': 'rw'}}
-#             )
-#             output = out.decode('utf-8')
-#         lines = []
-#         for line in output.split("\n"):
-#             lines.append(line)
-#
-#         for index, value in enumerate(lines):
-#             if value:
-#                 parse_message(value.replace(u"\u2018", "'").replace(u"\u2019", "'"))
-#
-#
-#     except docker.errors.NotFound:
-#         logging.error("Unable to retrieve container. Please verify container.")
-#     except docker.errors.APIError as e_error:
-#         logging.error("Docker API error due to: " + e_error)
-
-
 def parse_message(value):
     """Create  message object from input."""
     res = json.loads(value)
@@ -139,7 +107,6 @@ def parse_message(value):
                     logging.info(messageobject.getmessage())
                 if READY:
                     if group_not_in_blacklist(messageobject, blacklist) and group_in_whitelist(messageobject, whitelist):
-                        # channel.basic_publish(exchange='', routing_key='signalbot', body=messageobject.getmessage(), properties=pika.BasicProperties(content_type='application/json'))
                         run_signalcli(messageobject)
 
                     else:
@@ -159,7 +126,6 @@ def parse_message(value):
                     logging.info(messageobject.getgroupinfo())
                     logging.info(messageobject.getmessage())
                 if READY:
-                    # channel.basic_publish(exchange='', routing_key='signalbot', body=messageobject)
                     run_signalcli(messageobject)
                 else:
                     logging.info("NOOP due to ready mode set to false.")
@@ -182,7 +148,6 @@ def parse_message(value):
                 if READY:
                     if group_not_in_blacklist(messageobject, blacklist) and group_in_whitelist(messageobject, whitelist):
                         run_signalcli(messageobject)
-                        # channel.basic_publish(exchange='', routing_key='signalbot', body=messageobject)
                     else:
                         logging.info("Group" + messageobject.getgroupinfo() + " is in the blacklist OR not in whitelist.")
                 else:
@@ -201,7 +166,6 @@ def parse_message(value):
                     logging.info(messageobject.getmessage())
                 if READY:
                     run_signalcli(messageobject)
-                    # channel.basic_publish(exchange='', routing_key='signalbot', body=messageobject)
                 else:
                     logging.info("NOOP due to ready mode set to false.")
 
