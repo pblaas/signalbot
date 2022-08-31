@@ -56,6 +56,10 @@ https://www.webfx.com/tools/emoji-cheat-sheet/
 
 This bot is based on Signal CLI. https://github.com/AsamK/signal-cli.
 
+Starting with V1.0.0 the Signalbot is using a AMQP message bus. The main.py is responsible for posting the message on the bus.
+The receiver.py is responsible for performing actions on the bus messages.
+For the message bus RabbitMQ is being used.
+
 The bot can run in two modes. 
 * local executor mode
 * non-local executor mode
@@ -64,14 +68,11 @@ The bot can run in two modes.
 * Signal APP (when linking)
 * Docker engine
 * $HOME/signal directory which contains Signal user profile.
-* Giphy.com API key
-* Gnews API key
-* Twitch clientid and clientsecret
 
 
 ### Docker engine
 
-The bot implementation relies heavilly on container technology. The bot can be run inside of a container or outside of a container. When using the bot outside of a container it will still make calls to container image pblaas/signalcli for the response messages. More on this is explained in local or non-local executor mode.
+The bot implementation relies heavily on container technology. The bot can be run inside of a container or outside of a container. When using the bot outside of a container it will still make calls to container image pblaas/signalcli for the response messages. More on this is explained in local or non-local executor mode.
 
 The containers expect signal user profile configuration in /config. So when containers are started a volume mapping is mandatory.
 `-v $HOME/signal:/config`
@@ -79,7 +80,7 @@ The containers expect signal user profile configuration in /config. So when cont
 
 ### Local executor mode
 
-Local executor means the bot will run inside of a docker container and will also use the signal-cli command from inside of the container. 
+Local executor means the bot will run inside a docker container and will also use the signal-cli command from inside of the container. 
 
 Local executor mode is the default and expects the bot to run inside a container.
 There are two mandatory variables which need to be set in order for the bot to work.
