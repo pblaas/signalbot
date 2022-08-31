@@ -21,7 +21,6 @@ class Help:
         !twitch
         !bored
         !trivia
-        !gnews
         !xkcd
         !tmdb
         """

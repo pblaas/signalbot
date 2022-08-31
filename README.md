@@ -1,6 +1,7 @@
 # SignalBot
 ![alt text](coverage.svg "Code coverage")
 
+
 ## Create intial config
 ```
 mkdir $HOME/signal
@@ -32,7 +33,7 @@ echo `curl --silent https://api.chucknorris.io/jokes/random | jq '. | .value'` |
 * !gif  - show random gif from Giphy [DONE] [API] [APIKEY]
 * !weather - show weather 
 * !flip - Flip a coin heads or tails [DONE]
-* !gnews - parse latest news from gnews API. [DONE] [API] [APIKEY]
+* <del> !gnews - parse latest news from gnews API. [DONE] [API] [APIKEY] </del> [DEPRECATED]
 * !me - return with random reply [DONE]
 * !version - show version [DONE]
 * !help - show available commands [DONE]
