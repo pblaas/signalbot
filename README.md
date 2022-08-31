@@ -1,6 +1,7 @@
 # SignalBot
 ![alt text](coverage.svg "Code coverage")
 
+
 ## Create intial config
 ```
 mkdir $HOME/signal

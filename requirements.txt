@@ -8,3 +8,4 @@ pytest-cov
 pytest-dotenv
 coverage-badge
 six
+pika

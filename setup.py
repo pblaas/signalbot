@@ -9,5 +9,5 @@ setup(
     author=author,
     author_email=authoremail,
     license='MIT',
-    install_requires=['pytest', 'pytest-html', 'pytest-cov', 'pytest-dotenv', 'docker', 'haikunator', 'emoji', 'urllib3']
+    install_requires=['pytest', 'pytest-html', 'pytest-cov', 'pytest-dotenv', 'docker', 'haikunator', 'emoji', 'urllib3', 'pika']
 )
