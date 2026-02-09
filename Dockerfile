@@ -1,11 +1,11 @@
-FROM pblaas/signalcli:latest
+FROM signalcli:latest
 
 LABEL MAINTAINER="patrick@kite4fun.nl"
 
 USER root
 
 RUN apt-get update && \
-    apt-get -y install python3 python3-pip && \
+    apt-get -y install python3 python3-pip python3.13-venv && \
     apt-get clean
 
 RUN mkdir -p /tmp/signal && \
@@ -16,9 +16,11 @@ RUN mkdir /signalbot && \
 
 COPY signalbot/ ./signalbot/
 COPY requirements.txt ./
-RUN pip install -r requirements.txt
+RUN python3 -m venv /venv
+RUN . /venv/bin/activate
+RUN /venv/bin/pip install -r requirements.txt
 RUN chown -R nobody /signalbot
 
 USER nobody
 
-ENTRYPOINT ["python3", "/signalbot"]
+ENTRYPOINT ["/venv/bin/python3", "/signalbot"]
