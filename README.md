@@ -56,10 +56,6 @@ https://www.webfx.com/tools/emoji-cheat-sheet/
 
 This bot is based on Signal CLI. https://github.com/AsamK/signal-cli.
 
-Starting with V1.0.0 the Signalbot is using a AMQP message bus. The main.py is responsible for posting the message on the bus.
-The receiver.py is responsible for performing actions on the bus messages.
-For the message bus RabbitMQ is being used.
-
 The bot can run in two modes. 
 * local executor mode
 * non-local executor mode
@@ -67,20 +63,49 @@ The bot can run in two modes.
 ## Dependencies
 * Signal APP (when linking)
 * Docker engine
-* $HOME/signal directory which contains Signal user profile.
+* Giphy.com API key (optional)
+* Gnews API key (optional)
+* Twitch clientid and clientsecret (optional)
 
 
 ### Docker engine
 
-The bot implementation relies heavily on container technology. The bot can be run inside of a container or outside of a container. When using the bot outside of a container it will still make calls to container image pblaas/signalcli for the response messages. More on this is explained in local or non-local executor mode.
+The bot implementation relies heavilly on container technology. The bot can be run inside of a container or outside of a container. When using the bot outside of a container it will still make calls to container image pblaas/signalcli for the response messages. More on this is explained in local or non-local executor mode.
 
 The containers expect signal user profile configuration in /config. So when containers are started a volume mapping is mandatory.
 `-v $HOME/signal:/config`
 
+### Preparations
+
+Create initial directory structure to hold account information for sender and receiver.
+
+```
+mkdir -p $HOME/signalbot-poller && chown nobody $HOME/signalbot-poller
+mkdir -p $HOME/signalbot-sender && chown nobody $HOME/signalbot-sender
+```
+
+Create  signal accounts.
+
+`docker run -v $HOME/signalbot-sender:/config -e REGISTEREDNR="+316xxxxxxxx" --rm -it signalcli:latest link`
+`docker run -v $HOME/signalbot-poller:/config -e REGISTEREDNR="+316xxxxxxxx" --rm -it signalcli:latest link`
+
+Start up a RabbitMQ messagebus
+
+`docker run -d --hostname my-rabbit -p 5672:5672 -p 15672:15672 --name some-rabbit rabbitmq:3-management`
+
+
+### Building signalbot images
+
+The message parser:
+`docker build -t signalbot:latest .`
+
+The signal message receiver:
+`docker build -t signalbot:receiver . -f Dockerfile_receiver`
+
 
 ### Local executor mode
 
-Local executor means the bot will run inside a docker container and will also use the signal-cli command from inside of the container. 
+Local executor means the bot will run inside of a docker container and will also use the signal-cli command from inside of the container. 
 
 Local executor mode is the default and expects the bot to run inside a container.
 There are two mandatory variables which need to be set in order for the bot to work.
@@ -89,14 +114,22 @@ There are two mandatory variables which need to be set in order for the bot to w
 *   READY - Default set to False. In order for the Bot to respond it needs to be set to True.
 
 
+Starting with Signalbot 1.0.0 an AMQP messagebus is used. The signalbot process will pull the messages from the messagebus to process them.
+
 To start the bot run:
 ```
-docker run -v $HOME/signal:/config -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
+docker run -v $HOME/signalbot-sender:/config -e REGISTEREDNR="+31_YOUR_NUMBER" -e AMQPSERVERHOST=rabbitmq --link some-rabbit:rabbitmq --rm -it signalbot
 ```
 
 To enable to bot to reply to commands like !help
 ```
-docker run -v $HOME/signal:/config -e READY=True -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
+docker run -v $HOME/signalbot-sender:/config  -e REGISTEREDNR="+31_YOUR_NUMBER" -e AMQPSERVERHOST=rabbitmq  -e READY=True --rm -it signalbot
+```
+
+The process which pulls the message from the signal chats and put the message on the bus can be started with:
+
+```
+docker run -v $HOME/signalbot-poller:/config -e REGISTEREDNR="+31_YOUR_NUMBER" -e AMQPSERVERHOST=rabbitmq -e READY=true --link some-rabbit:rabbitmq --rm -it signalbot:receiver
 ```
 
 ### Non-local executor mode

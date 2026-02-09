@@ -23,4 +23,4 @@ RUN chown -R nobody /signalbot
 
 USER nobody
 
-ENTRYPOINT ["/venv/bin/python3", "/signalbot"]
+ENTRYPOINT ["/venv/bin/python3", "/signalbot/receiver.py"]

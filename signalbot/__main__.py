@@ -17,7 +17,7 @@ from metadata import version, author
 
 __author__ = author
 __version__ = version
-SIGNALCLIIMAGE = "pblaas/signalcli:latest"
+SIGNALCLIIMAGE = "signalcli:latest"
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
