@@ -63,10 +63,9 @@ The bot can run in two modes.
 ## Dependencies
 * Signal APP (when linking)
 * Docker engine
-* $HOME/signal directory which contains Signal user profile.
-* Giphy.com API key
-* Gnews API key
-* Twitch clientid and clientsecret
+* Giphy.com API key (optional)
+* Gnews API key (optional)
+* Twitch clientid and clientsecret (optional)
 
 
 ### Docker engine
@@ -75,6 +74,33 @@ The bot implementation relies heavilly on container technology. The bot can be r
 
 The containers expect signal user profile configuration in /config. So when containers are started a volume mapping is mandatory.
 `-v $HOME/signal:/config`
+
+### Preparations
+
+Create initial directory structure to hold account information for sender and receiver.
+
+```
+mkdir -p $HOME/signalbot-poller && chown nobody $HOME/signalbot-poller
+mkdir -p $HOME/signalbot-sender && chown nobody $HOME/signalbot-sender
+```
+
+Create  signal accounts.
+
+`docker run -v $HOME/signalbot-sender:/config -e REGISTEREDNR="+316xxxxxxxx" --rm -it signalcli:latest link`
+`docker run -v $HOME/signalbot-poller:/config -e REGISTEREDNR="+316xxxxxxxx" --rm -it signalcli:latest link`
+
+Start up a RabbitMQ messagebus
+
+`docker run -d --hostname my-rabbit -p 5672:5672 -p 15672:15672 --name some-rabbit rabbitmq:3-management`
+
+
+### Building signalbot images
+
+The message parser:
+`docker build -t signalbot:latest .`
+
+The signal message receiver:
+`docker build -t signalbot:receiver . -f Dockerfile_receiver`
 
 
 ### Local executor mode
@@ -88,14 +114,22 @@ There are two mandatory variables which need to be set in order for the bot to w
 *   READY - Default set to False. In order for the Bot to respond it needs to be set to True.
 
 
+Starting with Signalbot 1.0.0 an AMQP messagebus is used. The signalbot process will pull the messages from the messagebus to process them.
+
 To start the bot run:
 ```
-docker run -v $HOME/signal:/config -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
+docker run -v $HOME/signalbot-sender:/config -e REGISTEREDNR="+31_YOUR_NUMBER" -e AMQPSERVERHOST=rabbitmq --link some-rabbit:rabbitmq --rm -it signalbot
 ```
 
 To enable to bot to reply to commands like !help
 ```
-docker run -v $HOME/signal:/config -e READY=True -e REGISTEREDNR="+31_YOUR_NUMBER" --rm -it pblaas/signalbot
+docker run -v $HOME/signalbot-sender:/config  -e REGISTEREDNR="+31_YOUR_NUMBER" -e AMQPSERVERHOST=rabbitmq  -e READY=True --rm -it signalbot
+```
+
+The process which pulls the message from the signal chats and put the message on the bus can be started with:
+
+```
+docker run -v $HOME/signalbot-poller:/config -e REGISTEREDNR="+31_YOUR_NUMBER" -e AMQPSERVERHOST=rabbitmq -e READY=true --link some-rabbit:rabbitmq --rm -it signalbot:receiver
 ```
 
 ### Non-local executor mode
