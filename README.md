@@ -87,6 +87,7 @@ mkdir -p $HOME/signalbot-sender && chown nobody $HOME/signalbot-sender
 Create  signal accounts.
 
 `docker run -v $HOME/signalbot-sender:/config -e REGISTEREDNR="+316xxxxxxxx" --rm -it signalcli:latest link`
+
 `docker run -v $HOME/signalbot-poller:/config -e REGISTEREDNR="+316xxxxxxxx" --rm -it signalcli:latest link`
 
 Start up a RabbitMQ messagebus
